@@ -15,10 +15,13 @@ import java.time.LocalDateTime;
 public class StudentPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer paymentId;
 
-    private Integer payment_id;
+    private Boolean isPaid;
 
-    private Boolean is_paid;
+    private LocalDateTime payDate;
 
-    private LocalDateTime pay_date;
+    @ManyToOne
+    @JoinColumn(name = "studentId")
+    private Student student;
 }

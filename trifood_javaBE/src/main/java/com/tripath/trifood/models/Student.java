@@ -47,6 +47,10 @@ public class Student implements UserDetails {
     @JsonIgnore
     Set<StudentOrder> studentOrders;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @JsonIgnore
+    Set<StudentPayment> studentPayments;
+
 //   -------------------------TRIFOOD-ADD-----------------------------------
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
