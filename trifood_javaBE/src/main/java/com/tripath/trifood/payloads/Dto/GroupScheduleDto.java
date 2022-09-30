@@ -1,32 +1,38 @@
 package com.tripath.trifood.payloads.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tripath.trifood.models.EGroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class GroupScheduleDto {
+public class GroupScheduleDto implements Serializable {
     private Integer eGroupScheduleId;
 
     @NotEmpty
-    @Min(value = 2, message = "Day must be from 2 to 8 (Monday to Sunday)")
-    @Max(value = 8, message = "Day must be from 2 to 8 (Monday to Sunday)")
-    private Integer eGroupScheduleDay;
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+    private Date eGroupScheduleDate;
 
     @NotEmpty
-    private Integer eGroupScheduleStartYear;
+    private int eGroupScheduleDay;
 
     @NotEmpty
-    private Integer eGroupScheduleEndYear;
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+    private Date eGroupScheduleStartDate;
+
+    @NotEmpty
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+    private Date eGroupScheduleEndDate;
+
+    private Integer eGroupDailyPayment;
 
     private EGroup eGroup;
 }

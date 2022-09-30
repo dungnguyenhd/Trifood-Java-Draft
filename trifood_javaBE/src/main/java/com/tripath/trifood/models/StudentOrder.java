@@ -19,7 +19,7 @@ public class StudentOrder implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     Long orderId;
 
-    private LocalDateTime registerDate;
+    private Integer minus_payment;
 
     private String registerMeal;
 

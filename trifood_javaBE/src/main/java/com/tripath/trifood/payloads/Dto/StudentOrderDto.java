@@ -14,14 +14,13 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class StudentOrderDto {
-
-    private LocalDateTime registerDate;
-
     @NotEmpty
     private String registerMeal;
 
     @NotNull
     private GroupSchedule groupSchedule;
+
+    private Integer minusPayment;
 
     @NotNull
     private Student student;

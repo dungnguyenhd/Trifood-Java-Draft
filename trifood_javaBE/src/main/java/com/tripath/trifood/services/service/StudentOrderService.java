@@ -4,6 +4,8 @@ import com.tripath.trifood.payloads.Dto.StudentOrderDto;
 import com.tripath.trifood.payloads.response.StudentOrderResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public interface StudentOrderService {
     //create studentOrder
@@ -21,4 +23,7 @@ public interface StudentOrderService {
     //get single  studentOrder
     StudentOrderDto getStudentOrderById(Long studentOrderId);
 
+    Integer getStudentGroup(Integer studentId);
+
+    public Integer getTotalMinusPayment(String meal_name, Integer groupId, Date scheduleDate);
 }

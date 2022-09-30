@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,16 +31,19 @@ public class GroupScheduleServiceImpl implements GroupScheduleService {
     public GroupScheduleDto createGroupSchedule(GroupScheduleDto groupScheduleDto) {
         GroupSchedule groupSchedule = this.modelMapper.map(groupScheduleDto, GroupSchedule.class);
         GroupSchedule newGroupSchedule = this.groupScheduleRepo.save(groupSchedule);
+
         return this.modelMapper.map(newGroupSchedule, GroupScheduleDto.class);
     }
 
     @Override
     public GroupScheduleDto updateGroupSchedule(GroupScheduleDto groupScheduleDto, Integer groupScheduleId) {
         GroupSchedule groupSchedule = this.groupScheduleRepo.findById(groupScheduleId).orElseThrow(()-> new ResourceNotFoundException("GroupSchedule", "groupScheduleId", groupScheduleId));
-        groupSchedule.setEGroupScheduleEndYear(groupScheduleDto.getEGroupScheduleEndYear());
-        groupSchedule.setEGroupScheduleStartYear(groupScheduleDto.getEGroupScheduleStartYear());
-        groupSchedule.setEGroupScheduleDay(groupScheduleDto.getEGroupScheduleDay());
+        groupSchedule.setEGroupScheduleStartDate(groupScheduleDto.getEGroupScheduleStartDate());
+        groupSchedule.setEGroupScheduleEndDate(groupScheduleDto.getEGroupScheduleEndDate());
+        groupSchedule.setEGroupScheduleDay(groupScheduleDto.getEGroupScheduleDate().getDay());
         groupSchedule.setEGroup(groupScheduleDto.getEGroup());
+        groupSchedule.setEGroupDailyPayment(groupScheduleDto.getEGroupDailyPayment());
+        groupSchedule.setEGroupScheduleDate(groupScheduleDto.getEGroupScheduleDate());
 
         GroupSchedule updatedGroupSchedule = this.groupScheduleRepo.save(groupSchedule);
         return this.modelMapper.map(updatedGroupSchedule, GroupScheduleDto.class);
@@ -59,7 +63,7 @@ public class GroupScheduleServiceImpl implements GroupScheduleService {
         Pageable p = PageRequest.of(pageNumber, pageSize, sort);
         Page<GroupSchedule> pageGroupSchedule = this.groupScheduleRepo.findAll(p);
         List<GroupSchedule> allGroupSchedule = pageGroupSchedule.getContent();
-        List<GroupScheduleDto> groupScheduleDtos = allGroupSchedule.stream().map((groupSchedule) -> this.modelMapper.map(groupSchedule, GroupScheduleDto.class)).collect(Collectors.toList());
+        List<GroupScheduleDto> groupScheduleDtos = allGroupSchedule.stream().map((groupScheduleDto) -> this.modelMapper.map(groupScheduleDto, GroupScheduleDto.class)).collect(Collectors.toList());
 
         GroupScheduleResponse groupScheduleResponse = new GroupScheduleResponse();
         groupScheduleResponse.setContent(groupScheduleDtos);
@@ -77,4 +81,9 @@ public class GroupScheduleServiceImpl implements GroupScheduleService {
         return this.modelMapper.map(groupSchedule, GroupScheduleDto.class);
     }
 
+    @Override
+    public Integer getDailyPayment(String scheduleDate, Integer groupId){
+        Integer dailyPayment = this.groupScheduleRepo.getTotalPayment(scheduleDate, groupId);
+        return dailyPayment;
+    }
 }

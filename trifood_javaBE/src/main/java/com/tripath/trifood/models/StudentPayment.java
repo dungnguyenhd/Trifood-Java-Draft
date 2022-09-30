@@ -17,6 +17,8 @@ public class StudentPayment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer paymentId;
 
+    private Long totalMoney;
+
     private Boolean isPaid;
 
     private LocalDateTime payDate;

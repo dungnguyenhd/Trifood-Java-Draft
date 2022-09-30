@@ -6,6 +6,7 @@ import com.tripath.trifood.payloads.Dto.MealDto;
 import com.tripath.trifood.payloads.response.MealResponse;
 import com.tripath.trifood.repositories.MealRepository;
 import com.tripath.trifood.services.service.MealService;
+import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

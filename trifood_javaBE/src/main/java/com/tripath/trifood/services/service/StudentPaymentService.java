@@ -2,7 +2,10 @@ package com.tripath.trifood.services.service;
 
 import com.tripath.trifood.payloads.Dto.StudentPaymentDto;
 import com.tripath.trifood.payloads.response.StudentPaymentResponse;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public interface StudentPaymentService {
@@ -19,4 +22,6 @@ public interface StudentPaymentService {
 
     //get single  studentPayment
     StudentPaymentDto getStudentPaymentById(Integer studentPaymentId);
+
+    Integer getMonthlyPayment(Date startDate, Date endDate);
 }

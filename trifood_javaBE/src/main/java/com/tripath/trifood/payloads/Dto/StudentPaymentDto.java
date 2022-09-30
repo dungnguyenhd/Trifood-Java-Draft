@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 public class StudentPaymentDto {
     private Boolean isPaid;
 
+    private Long totalMoney;
+
     private LocalDateTime payDate;
 
     private Student student;

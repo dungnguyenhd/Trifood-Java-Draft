@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/studentPayment")
 public class StudentPaymentController {
@@ -49,5 +51,13 @@ public class StudentPaymentController {
     public ResponseEntity<StudentPaymentDto> updateStudentPayment(@RequestBody StudentPaymentDto studentPaymentDto, @PathVariable Integer studentPaymentId){
         StudentPaymentDto updatedStudentPayment = this.studentPaymentService.updateStudentPayment(studentPaymentDto, studentPaymentId);
         return new ResponseEntity<>(updatedStudentPayment, HttpStatus.OK);
+    }
+
+    @GetMapping("/totalPayment")
+    public Integer getTotalPayment(
+            @RequestParam(value = "startDate", required = false) Date startDate,
+            @RequestParam(value = "endDate", required = false) Date endDate){
+        Integer totalPayment = this.studentPaymentService.getMonthlyPayment(startDate, endDate);
+        return totalPayment;
     }
 }

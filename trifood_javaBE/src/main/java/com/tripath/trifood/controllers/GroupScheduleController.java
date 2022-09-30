@@ -5,27 +5,32 @@ import com.tripath.trifood.payloads.response.ApiResponse;
 import com.tripath.trifood.payloads.response.GroupScheduleResponse;
 import com.tripath.trifood.services.service.GroupScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/groupSchedule")
+@RequestMapping(value = "/api/groupSchedule")
 public class GroupScheduleController {
 
     @Autowired
     private GroupScheduleService groupScheduleService;
 
     @PostMapping("")
-    public ResponseEntity<GroupScheduleDto> createGroupSchedule(@RequestBody GroupScheduleDto groupScheduleDto){
+    public ResponseEntity<GroupScheduleDto> createGroupSchedule(@RequestBody GroupScheduleDto groupScheduleDto) throws ParseException {
         GroupScheduleDto createGroupSchedule = this.groupScheduleService.createGroupSchedule(groupScheduleDto);
+        createGroupSchedule.setEGroupScheduleDay(createGroupSchedule.getEGroupScheduleDate().getDay());
         return new ResponseEntity<>(createGroupSchedule, HttpStatus.CREATED);
     }
 
     @GetMapping("")
-    public ResponseEntity<GroupScheduleResponse> getAllGroupSchedulees(
+    public ResponseEntity<GroupScheduleResponse> getAllGroupSchedules(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
             @RequestParam(value = "sortBy",defaultValue = "eGroupScheduleId", required = false) String sortBy,
@@ -51,5 +56,11 @@ public class GroupScheduleController {
     public ResponseEntity<GroupScheduleDto> updateGroupSchedule(@RequestBody GroupScheduleDto groupScheduleDto, @PathVariable Integer groupScheduleId){
         GroupScheduleDto updatedGroupSchedule = this.groupScheduleService.updateGroupSchedule(groupScheduleDto, groupScheduleId);
         return new ResponseEntity<>(updatedGroupSchedule, HttpStatus.OK);
+    }
+
+    @GetMapping("/getPayment/{groupScheduleDate}/{groupId}")
+    public Integer getDailyPayment(@PathVariable String groupScheduleDate, @PathVariable Integer groupId){
+        Integer dailyPayment = this.groupScheduleService.getDailyPayment(groupScheduleDate, groupId);
+        return dailyPayment;
     }
 }

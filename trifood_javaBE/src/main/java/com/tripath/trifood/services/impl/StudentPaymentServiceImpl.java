@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,7 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
         StudentPayment studentPayment = this.studentPaymentRepo.findById(studentPaymentId).orElseThrow(()-> new ResourceNotFoundException("StudentPayment", "studentPaymentId", studentPaymentId));
         studentPayment.setIsPaid(studentPaymentDto.getIsPaid());
         studentPayment.setPayDate(studentPaymentDto.getPayDate());
+        studentPayment.setTotalMoney(studentPaymentDto.getTotalMoney());
         studentPayment.setStudent(studentPaymentDto.getStudent());
 
         StudentPayment updatedStudentPayment = this.studentPaymentRepo.save(studentPayment);
@@ -74,5 +76,11 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     public StudentPaymentDto getStudentPaymentById(Integer studentPaymentId) {
         StudentPayment studentPayment = this.studentPaymentRepo.findById(studentPaymentId).orElseThrow(()-> new ResourceNotFoundException("StudentPayment", "studentPaymentId", studentPaymentId));
         return this.modelMapper.map(studentPayment, StudentPaymentDto.class);
+    }
+
+    @Override
+    public Integer getMonthlyPayment(Date startDate, Date endDate) {
+        Integer totalPayment = this.studentPaymentRepo.getMonthlyPayment(startDate, endDate);
+        return null;
     }
 }

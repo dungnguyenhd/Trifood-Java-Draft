@@ -19,6 +19,10 @@ public class StudentOrderController {
     @PostMapping("")
     public ResponseEntity<StudentOrderDto> createStudentOrder(@RequestBody StudentOrderDto studentOrderDto){
         StudentOrderDto createStudentOrder = this.studentOrderService.createStudentOrder(studentOrderDto);
+        createStudentOrder.setMinusPayment(this.studentOrderService.getTotalMinusPayment(createStudentOrder.getRegisterMeal(),
+                this.studentOrderService.getStudentGroup(studentOrderDto.getStudent().getId()),
+                createStudentOrder.getGroupSchedule().getEGroupScheduleDate()
+                ));
         return new ResponseEntity<>(createStudentOrder, HttpStatus.CREATED);
     }
 

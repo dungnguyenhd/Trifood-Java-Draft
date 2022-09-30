@@ -2,7 +2,10 @@ package com.tripath.trifood.services.service;
 
 import com.tripath.trifood.payloads.Dto.GroupScheduleDto;
 import com.tripath.trifood.payloads.response.GroupScheduleResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public interface GroupScheduleService {
@@ -20,4 +23,6 @@ public interface GroupScheduleService {
 
     //get single  groupSchedule
     GroupScheduleDto getGroupScheduleById(Integer groupScheduleId);
+
+    Integer getDailyPayment(String scheduleDate, Integer groupId);
 }

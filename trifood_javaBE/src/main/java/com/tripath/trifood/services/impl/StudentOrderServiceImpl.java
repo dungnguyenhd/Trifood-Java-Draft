@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,6 @@ public class StudentOrderServiceImpl implements StudentOrderService {
         studentOrder.setGroupSchedule(studentOrderDto.getGroupSchedule());
         studentOrder.setStudent(studentOrderDto.getStudent());
         studentOrder.setRegisterMeal(studentOrderDto.getRegisterMeal());
-        studentOrder.setRegisterDate(studentOrderDto.getRegisterDate());
 
         StudentOrder updatedStudentOrder = this.studentOrderRepo.save(studentOrder);
         return this.modelMapper.map(updatedStudentOrder, StudentOrderDto.class);
@@ -75,5 +75,17 @@ public class StudentOrderServiceImpl implements StudentOrderService {
     public StudentOrderDto getStudentOrderById(Long studentOrderId) {
         StudentOrder studentOrder = this.studentOrderRepo.findById(studentOrderId).orElseThrow(()-> new ResourceNotFoundException("StudentOrder", "studentOrderId", studentOrderId));
         return this.modelMapper.map(studentOrder, StudentOrderDto.class);
+    }
+
+    @Override
+    public Integer getStudentGroup(Integer studentId) {
+        Integer groupId = this.studentOrderRepo.getStudentGroup(studentId);
+        return groupId;
+    }
+
+    @Override
+    public Integer getTotalMinusPayment(String meal_name, Integer groupId, Date scheduleDate) {
+        Integer minusPayment = this.studentOrderRepo.getMinusPayment(meal_name, groupId, scheduleDate);
+        return minusPayment;
     }
 }
