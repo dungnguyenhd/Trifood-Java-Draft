@@ -23,5 +23,5 @@ public interface StudentPaymentService {
     //get single  studentPayment
     StudentPaymentDto getStudentPaymentById(Integer studentPaymentId);
 
-    Integer getMonthlyPayment(Date startDate, Date endDate);
+    Integer getMonthlyPayment(String startDate, String endDate, Integer studentId);
 }

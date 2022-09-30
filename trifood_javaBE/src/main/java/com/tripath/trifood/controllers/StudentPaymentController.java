@@ -55,9 +55,10 @@ public class StudentPaymentController {
 
     @GetMapping("/totalPayment")
     public Integer getTotalPayment(
-            @RequestParam(value = "startDate", required = false) Date startDate,
-            @RequestParam(value = "endDate", required = false) Date endDate){
-        Integer totalPayment = this.studentPaymentService.getMonthlyPayment(startDate, endDate);
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate,
+            @RequestParam(value = "studentId", required = false) Integer studentId){
+        Integer totalPayment = this.studentPaymentService.getMonthlyPayment(startDate, endDate, studentId);
         return totalPayment;
     }
 }

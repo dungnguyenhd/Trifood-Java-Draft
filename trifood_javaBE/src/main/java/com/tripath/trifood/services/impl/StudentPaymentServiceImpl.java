@@ -6,6 +6,7 @@ import com.tripath.trifood.payloads.Dto.StudentPaymentDto;
 import com.tripath.trifood.payloads.response.StudentPaymentResponse;
 import com.tripath.trifood.repositories.StudentPaymentRepository;
 import com.tripath.trifood.services.service.StudentPaymentService;
+import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -79,8 +80,8 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     }
 
     @Override
-    public Integer getMonthlyPayment(Date startDate, Date endDate) {
-        Integer totalPayment = this.studentPaymentRepo.getMonthlyPayment(startDate, endDate);
-        return null;
+    public Integer getMonthlyPayment(String startDate, String endDate, Integer studentId) {
+        Integer totalPayment = this.studentPaymentRepo.getMonthlyPayment(startDate, endDate, studentId);
+        return totalPayment;
     }
 }

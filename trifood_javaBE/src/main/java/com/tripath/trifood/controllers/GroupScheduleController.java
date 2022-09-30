@@ -58,8 +58,9 @@ public class GroupScheduleController {
         return new ResponseEntity<>(updatedGroupSchedule, HttpStatus.OK);
     }
 
-    @GetMapping("/getPayment/{groupScheduleDate}/{groupId}")
-    public Integer getDailyPayment(@PathVariable String groupScheduleDate, @PathVariable Integer groupId){
+    @GetMapping("/getPayment")
+    public Integer getDailyPayment(@RequestParam(value = "groupScheduleDate",required = false) String groupScheduleDate,
+                                   @RequestParam(value = "groupId",required = false) Integer groupId){
         Integer dailyPayment = this.groupScheduleService.getDailyPayment(groupScheduleDate, groupId);
         return dailyPayment;
     }
