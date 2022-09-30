@@ -1,8 +1,8 @@
 package com.tripath.trifood;
 
-import com.tripath.trifood.config.AppConstants;
-import com.tripath.trifood.models.Role;
-import com.tripath.trifood.repositories.RoleRepository;
+import com.tripath.trifood.common.config.AppConstants;
+import com.tripath.trifood.entities.Role;
+import com.tripath.trifood.api.student.repository.RoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
