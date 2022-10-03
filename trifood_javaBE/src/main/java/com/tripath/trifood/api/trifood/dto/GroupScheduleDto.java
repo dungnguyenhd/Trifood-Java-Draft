@@ -18,13 +18,6 @@ public class GroupScheduleDto implements Serializable {
 
     @NotEmpty
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private Date eGroupScheduleDate;
-
-    @NotEmpty
-    private int eGroupScheduleDay;
-
-    @NotEmpty
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private Date eGroupScheduleStartDate;
 
     @NotEmpty

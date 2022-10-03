@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/groupSchedule")
@@ -21,7 +22,6 @@ public class GroupScheduleController {
     @PostMapping("")
     public ResponseEntity<GroupScheduleDto> createGroupSchedule(@RequestBody GroupScheduleDto groupScheduleDto) throws ParseException {
         GroupScheduleDto createGroupSchedule = this.groupScheduleService.createGroupSchedule(groupScheduleDto);
-        createGroupSchedule.setEGroupScheduleDay(createGroupSchedule.getEGroupScheduleDate().getDay());
         return new ResponseEntity<>(createGroupSchedule, HttpStatus.CREATED);
     }
 
@@ -55,9 +55,20 @@ public class GroupScheduleController {
     }
 
     @GetMapping("/getPayment")
-    public Integer getDailyPayment(@RequestParam(value = "groupScheduleDate",required = false) String groupScheduleDate,
+    public Integer getDailyPayment(@RequestParam(value = "mealDate",required = false) String mealDate,
                                    @RequestParam(value = "groupId",required = false) Integer groupId){
-        Integer dailyPayment = this.groupScheduleService.getDailyPayment(groupScheduleDate, groupId);
+        Integer dailyPayment = this.groupScheduleService.getDailyPayment(mealDate, groupId);
         return dailyPayment;
     }
+
+    @GetMapping("/findGroupSchedule")
+    public ResponseEntity<List<GroupScheduleDto>> getAllGroupSchedules(
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate,
+            @RequestParam(value = "groupId", required = false) Integer groupId
+    ){
+        List<GroupScheduleDto> groupSchedules = this.groupScheduleService.findGroupSchedule(startDate, endDate, groupId);
+        return new ResponseEntity<>(groupSchedules, HttpStatus.OK) ;
+    }
+
 }

@@ -4,10 +4,14 @@ import com.tripath.trifood.api.trifood.dto.MealDto;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.response.MealResponse;
 import com.tripath.trifood.api.trifood.services.service.MealService;
+import com.tripath.trifood.api.trifood.services.service.ScheduleReturnService;
+import com.tripath.trifood.repositories.trifood.MealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/meal")
@@ -15,6 +19,9 @@ public class MealController {
 
     @Autowired
     private MealService mealService;
+
+    @Autowired
+    private MealRepository mealRepo;
 
     @PostMapping("")
     public ResponseEntity<MealDto> createMeal(@RequestBody MealDto mealDto){
@@ -48,6 +55,17 @@ public class MealController {
     @PutMapping("/{mealId}")
     public ResponseEntity<MealDto> updateMeal(@RequestBody MealDto mealDto, @PathVariable Long mealId){
         MealDto updatedMeal = this.mealService.updateMeal(mealDto, mealId);
+        updatedMeal.setMealDate(mealDto.getMealDate());
+        updatedMeal.setMealDay(mealDto.getMealDate().getDay());
         return new ResponseEntity<>(updatedMeal, HttpStatus.OK);
+    }
+
+    @GetMapping("/findMealFood")
+    public List<ScheduleReturnService> getMealFood(
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate
+    ){
+        List<ScheduleReturnService> result = this.mealRepo.getMealFood(startDate, endDate);
+        return result;
     }
 }

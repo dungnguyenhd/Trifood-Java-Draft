@@ -15,6 +15,6 @@ public interface StudentOrderRepository extends JpaRepository<StudentOrder, Long
             "SELECT food_price\n" +
             "FROM ((eating_group_schedules s INNER JOIN meal m ON s.e_group_schedule_id  =  m.e_group_schedule_id) \n" +
             "INNER JOIN food f ON m.food_id = f.food_id) \n" +
-            "WHERE meal_name = ? AND e_group_id = ? AND e_group_schedule_date = ?) AS P", nativeQuery = true)
-    public Integer getMinusPayment(String meal_name, Integer groupId, Date scheduleDate);
+            "WHERE meal_name = ? AND e_group_id = ? AND meal_date = ?) AS P", nativeQuery = true)
+    public Integer getMinusPayment(String meal_name, Integer groupId, String mealDate);
 }

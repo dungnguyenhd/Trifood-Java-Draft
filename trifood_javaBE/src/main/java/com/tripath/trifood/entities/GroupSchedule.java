@@ -22,13 +22,6 @@ public class GroupSchedule implements Serializable {
     @Column(name = "eGroup_schedule_id")
     private Integer eGroupScheduleId;
 
-    @Column(name = "eGroup_schedule_day", length = 1)
-    private int eGroupScheduleDay;
-
-    @Column(name = "eGroup_schedule_date")
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private Date eGroupScheduleDate;
-
     @Column(name = "eGroup_schedule_start_date")
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private Date eGroupScheduleStartDate;

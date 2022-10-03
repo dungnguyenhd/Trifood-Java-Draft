@@ -1,11 +1,13 @@
 package com.tripath.trifood.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -26,4 +28,9 @@ public class Meal implements Serializable {
 
     @Column(name = "meal_name")
     private String mealName;
+
+    private int mealDay;
+
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+    private Date mealDate;
 }

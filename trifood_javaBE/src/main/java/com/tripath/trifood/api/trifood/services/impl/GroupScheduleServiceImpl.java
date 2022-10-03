@@ -1,6 +1,8 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
+import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
+import com.tripath.trifood.entities.EClass;
 import com.tripath.trifood.entities.GroupSchedule;
 import com.tripath.trifood.api.trifood.dto.GroupScheduleDto;
 import com.tripath.trifood.api.trifood.response.GroupScheduleResponse;
@@ -39,10 +41,8 @@ public class GroupScheduleServiceImpl implements GroupScheduleService {
         GroupSchedule groupSchedule = this.groupScheduleRepo.findById(groupScheduleId).orElseThrow(()-> new ResourceNotFoundException("GroupSchedule", "groupScheduleId", groupScheduleId));
         groupSchedule.setEGroupScheduleStartDate(groupScheduleDto.getEGroupScheduleStartDate());
         groupSchedule.setEGroupScheduleEndDate(groupScheduleDto.getEGroupScheduleEndDate());
-        groupSchedule.setEGroupScheduleDay(groupScheduleDto.getEGroupScheduleDate().getDay());
         groupSchedule.setEGroup(groupScheduleDto.getEGroup());
         groupSchedule.setEGroupDailyPayment(groupScheduleDto.getEGroupDailyPayment());
-        groupSchedule.setEGroupScheduleDate(groupScheduleDto.getEGroupScheduleDate());
 
         GroupSchedule updatedGroupSchedule = this.groupScheduleRepo.save(groupSchedule);
         return this.modelMapper.map(updatedGroupSchedule, GroupScheduleDto.class);
@@ -81,8 +81,15 @@ public class GroupScheduleServiceImpl implements GroupScheduleService {
     }
 
     @Override
-    public Integer getDailyPayment(String scheduleDate, Integer groupId){
-        Integer dailyPayment = this.groupScheduleRepo.getTotalPayment(scheduleDate, groupId);
+    public Integer getDailyPayment(String mealDate, Integer groupId){
+        Integer dailyPayment = this.groupScheduleRepo.getTotalPayment(mealDate, groupId);
         return dailyPayment;
+    }
+
+    @Override
+    public List<GroupScheduleDto> findGroupSchedule(String startDate, String endDate, Integer groupId) {
+        List<GroupSchedule> groupSchedules = this.groupScheduleRepo.findGroupSchedule(startDate, endDate, groupId);
+        List<GroupScheduleDto> groupScheduleDtos = groupSchedules.stream().map((eGroupSchedule)->this.modelMapper.map(eGroupSchedule, GroupScheduleDto.class)).collect(Collectors.toList());
+        return groupScheduleDtos;
     }
 }

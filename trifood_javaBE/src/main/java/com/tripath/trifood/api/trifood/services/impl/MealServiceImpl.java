@@ -29,6 +29,7 @@ public class MealServiceImpl implements MealService {
     @Override
     public MealDto createMeal(MealDto mealDto) {
         Meal meal = this.modelMapper.map(mealDto, Meal.class);
+        meal.setMealDay(meal.getMealDate().getDay());
         Meal newEgroup = this.mealRepo.save(meal);
         return this.modelMapper.map(newEgroup, MealDto.class);
     }
@@ -75,4 +76,5 @@ public class MealServiceImpl implements MealService {
         Meal meal = this.mealRepo.findById(mealId).orElseThrow(()-> new ResourceNotFoundException("Meal", "mealId", mealId));
         return this.modelMapper.map(meal, MealDto.class);
     }
+
 }

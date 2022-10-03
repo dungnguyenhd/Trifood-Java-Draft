@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,8 +32,18 @@ public class StudentOrderServiceImpl implements StudentOrderService {
     @Override
     public StudentOrderDto createStudentOrder(StudentOrderDto studentOrderDto) {
         StudentOrder studentOrder = this.modelMapper.map(studentOrderDto, StudentOrder.class);
-        StudentOrder newEgroup = this.studentOrderRepo.save(studentOrder);
-        return this.modelMapper.map(newEgroup, StudentOrderDto.class);
+
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = dateFormat.format(studentOrder.getOrderDate());
+
+        studentOrder.setMinusPayment(this.studentOrderRepo.getMinusPayment(studentOrder.getRegisterMeal(),
+                this.studentOrderRepo.getStudentGroup(studentOrderDto.getStudent().getId()),
+                strDate
+        ));
+
+        StudentOrder newOrder = this.studentOrderRepo.save(studentOrder);
+        return this.modelMapper.map(newOrder, StudentOrderDto.class);
     }
 
     @Override
@@ -84,8 +96,8 @@ public class StudentOrderServiceImpl implements StudentOrderService {
     }
 
     @Override
-    public Integer getTotalMinusPayment(String meal_name, Integer groupId, Date scheduleDate) {
-        Integer minusPayment = this.studentOrderRepo.getMinusPayment(meal_name, groupId, scheduleDate);
+    public Integer getTotalMinusPayment(String meal_name, Integer groupId, String mealDate) {
+        Integer minusPayment = this.studentOrderRepo.getMinusPayment(meal_name, groupId, mealDate);
         return minusPayment;
     }
 }

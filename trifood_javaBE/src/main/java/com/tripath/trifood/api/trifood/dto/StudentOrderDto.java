@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -20,6 +21,8 @@ public class StudentOrderDto {
     private GroupSchedule groupSchedule;
 
     private Integer minusPayment;
+
+    private Date orderDate;
 
     @NotNull
     private Student student;

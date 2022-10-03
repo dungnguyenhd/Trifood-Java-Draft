@@ -34,7 +34,7 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     }
 
     @Override
-    public StudentPaymentDto updateStudentPayment(StudentPaymentDto studentPaymentDto, Integer studentPaymentId) {
+    public StudentPaymentDto updateStudentPayment(StudentPaymentDto studentPaymentDto, Long studentPaymentId) {
         StudentPayment studentPayment = this.studentPaymentRepo.findById(studentPaymentId).orElseThrow(()-> new ResourceNotFoundException("StudentPayment", "studentPaymentId", studentPaymentId));
         studentPayment.setIsPaid(studentPaymentDto.getIsPaid());
         studentPayment.setPayDate(studentPaymentDto.getPayDate());
@@ -46,7 +46,7 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     }
 
     @Override
-    public void deleteStudentPayment(Integer studentPaymentId) {
+    public void deleteStudentPayment(Long studentPaymentId) {
         StudentPayment studentPayment = this.studentPaymentRepo.findById(studentPaymentId).orElseThrow(()-> new ResourceNotFoundException("StudentPayment", "studentPaymentId", studentPaymentId));
         this.studentPaymentRepo.delete(studentPayment);
     }
@@ -72,7 +72,7 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     }
 
     @Override
-    public StudentPaymentDto getStudentPaymentById(Integer studentPaymentId) {
+    public StudentPaymentDto getStudentPaymentById(Long studentPaymentId) {
         StudentPayment studentPayment = this.studentPaymentRepo.findById(studentPaymentId).orElseThrow(()-> new ResourceNotFoundException("StudentPayment", "studentPaymentId", studentPaymentId));
         return this.modelMapper.map(studentPayment, StudentPaymentDto.class);
     }

@@ -21,5 +21,5 @@ public interface StudentOrderService {
 
     Integer getStudentGroup(Integer studentId);
 
-    public Integer getTotalMinusPayment(String meal_name, Integer groupId, Date scheduleDate);
+    public Integer getTotalMinusPayment(String meal_name, Integer groupId, String scheduleDate);
 }

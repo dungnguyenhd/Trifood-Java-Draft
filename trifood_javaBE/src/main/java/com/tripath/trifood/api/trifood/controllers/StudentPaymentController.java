@@ -34,19 +34,19 @@ public class StudentPaymentController {
     }
 
     @GetMapping("/{studentPaymentId}")
-    public ResponseEntity<StudentPaymentDto> getStudentPaymentById(@PathVariable Integer studentPaymentId){
+    public ResponseEntity<StudentPaymentDto> getStudentPaymentById(@PathVariable Long studentPaymentId){
         StudentPaymentDto studentPaymentDto = this.studentPaymentService.getStudentPaymentById(studentPaymentId);
         return new ResponseEntity<>(studentPaymentDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{studentPaymentId}")
-    public ApiResponse deteleStudentPayment(@PathVariable Integer studentPaymentId){
+    public ApiResponse deteleStudentPayment(@PathVariable Long studentPaymentId){
         this.studentPaymentService.deleteStudentPayment(studentPaymentId);
         return new ApiResponse("Delete successful",true);
     }
 
     @PutMapping("/{studentPaymentId}")
-    public ResponseEntity<StudentPaymentDto> updateStudentPayment(@RequestBody StudentPaymentDto studentPaymentDto, @PathVariable Integer studentPaymentId){
+    public ResponseEntity<StudentPaymentDto> updateStudentPayment(@RequestBody StudentPaymentDto studentPaymentDto, @PathVariable Long studentPaymentId){
         StudentPaymentDto updatedStudentPayment = this.studentPaymentService.updateStudentPayment(studentPaymentDto, studentPaymentId);
         return new ResponseEntity<>(updatedStudentPayment, HttpStatus.OK);
     }

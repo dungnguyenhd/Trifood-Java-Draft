@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 public interface StudentPaymentService {
     StudentPaymentDto createStudentPayment(StudentPaymentDto studentPaymentDto);
 
-    StudentPaymentDto updateStudentPayment(StudentPaymentDto studentPaymentDto, Integer studentPaymentId);
+    StudentPaymentDto updateStudentPayment(StudentPaymentDto studentPaymentDto, Long studentPaymentId);
 
-    void deleteStudentPayment(Integer studentPaymentId);
+    void deleteStudentPayment(Long studentPaymentId);
 
     StudentPaymentResponse getAllStudentPayment(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
-    StudentPaymentDto getStudentPaymentById(Integer studentPaymentId);
+    StudentPaymentDto getStudentPaymentById(Long studentPaymentId);
 
     Integer getMonthlyPayment(String startDate, String endDate, Integer studentId);
 }

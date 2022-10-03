@@ -4,7 +4,6 @@ import com.tripath.trifood.api.trifood.dto.MealDto;
 import com.tripath.trifood.api.trifood.response.MealResponse;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public interface MealService {
 
