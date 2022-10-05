@@ -1,6 +1,7 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
+import com.tripath.trifood.api.trifood.services.service.PaymentManagerService;
 import com.tripath.trifood.entities.StudentPayment;
 import com.tripath.trifood.api.trifood.dto.StudentPaymentDto;
 import com.tripath.trifood.api.trifood.response.StudentPaymentResponse;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentPaymentServiceImpl implements StudentPaymentService {
@@ -52,23 +52,21 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     }
 
     @Override
-    public StudentPaymentResponse getAllStudentPayment(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+    public List<PaymentManagerService> getAllStudentPayment(String startDate, String endDate) {
+        List<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.getAllPayment(startDate, endDate);
+        return pageStudentPayment;
+    }
 
-        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+    @Override
+    public List<PaymentManagerService> sortPayment(String startDate, String endDate, String classLevel, String classGrade, String className) {
+        List<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.sortPayment(startDate, endDate, classLevel, classGrade, className);
+        return pageStudentPayment;
+    }
 
-        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
-        Page<StudentPayment> pageStudentPayment = this.studentPaymentRepo.findAll(p);
-        List<StudentPayment> allStudentPayment = pageStudentPayment.getContent();
-        List<StudentPaymentDto> studentPaymentDtos = allStudentPayment.stream().map((studentPayment) -> this.modelMapper.map(studentPayment, StudentPaymentDto.class)).collect(Collectors.toList());
-
-        StudentPaymentResponse studentPaymentResponse = new StudentPaymentResponse();
-        studentPaymentResponse.setContent(studentPaymentDtos);
-        studentPaymentResponse.setPageNumber(pageStudentPayment.getNumber());
-        studentPaymentResponse.setTotalElements(pageStudentPayment.getTotalElements());
-        studentPaymentResponse.setTotalPages(pageStudentPayment.getTotalPages());
-        studentPaymentResponse.setLastPage(pageStudentPayment.isLast());
-
-        return studentPaymentResponse;
+    @Override
+    public List<PaymentManagerService> searchPaymentByStudentName(String startDate, String endDate, String studentName) {
+        List<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.searchPaymentByStudentName(startDate, endDate, studentName);
+        return pageStudentPayment;
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
-import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
-import com.tripath.trifood.entities.EClass;
 import com.tripath.trifood.entities.GroupSchedule;
 import com.tripath.trifood.api.trifood.dto.GroupScheduleDto;
 import com.tripath.trifood.api.trifood.response.GroupScheduleResponse;

@@ -4,6 +4,8 @@ import com.tripath.trifood.api.trifood.dto.StudentPaymentDto;
 import com.tripath.trifood.api.trifood.response.StudentPaymentResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface StudentPaymentService {
     StudentPaymentDto createStudentPayment(StudentPaymentDto studentPaymentDto);
@@ -12,7 +14,11 @@ public interface StudentPaymentService {
 
     void deleteStudentPayment(Long studentPaymentId);
 
-    StudentPaymentResponse getAllStudentPayment(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
+    List<PaymentManagerService> getAllStudentPayment(String startDate, String endDate);
+
+    List<PaymentManagerService> sortPayment(String startDate, String endDate, String classLevel, String classGrade, String className);
+
+    List<PaymentManagerService> searchPaymentByStudentName(String startDate, String endDate, String studentName);
 
     StudentPaymentDto getStudentPaymentById(Long studentPaymentId);
 

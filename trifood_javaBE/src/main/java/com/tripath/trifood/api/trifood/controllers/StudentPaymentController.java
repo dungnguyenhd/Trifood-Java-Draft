@@ -3,18 +3,29 @@ package com.tripath.trifood.api.trifood.controllers;
 import com.tripath.trifood.api.trifood.dto.StudentPaymentDto;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.response.StudentPaymentResponse;
+import com.tripath.trifood.api.trifood.services.service.FoodAmountReturnService;
+import com.tripath.trifood.api.trifood.services.service.PaymentManagerService;
 import com.tripath.trifood.api.trifood.services.service.StudentPaymentService;
+import com.tripath.trifood.repositories.trifood.GroupScheduleRespository;
+import com.tripath.trifood.repositories.trifood.StudentPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/studentPayment")
 public class StudentPaymentController {
-
     @Autowired
     private StudentPaymentService studentPaymentService;
+
+    @Autowired
+    private GroupScheduleRespository gsRepo;
+
+    @Autowired
+    private StudentPaymentRepository payRepo;
 
     @PostMapping("")
     public ResponseEntity<StudentPaymentDto> createStudentPayment(@RequestBody StudentPaymentDto studentPaymentDto){
@@ -23,13 +34,33 @@ public class StudentPaymentController {
     }
 
     @GetMapping("")
-    public ResponseEntity<StudentPaymentResponse> getAllStudentPayments(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy",defaultValue = "paymentId", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    public ResponseEntity<List<PaymentManagerService>> getAllStudentPayments(
+            @RequestParam(value = "startDate", defaultValue = "2022-02-10", required = true) String startDate,
+            @RequestParam(value = "endDate", defaultValue = "2022-02-18", required = true) String endDate
     ){
-        StudentPaymentResponse studentPaymentResponse = this.studentPaymentService.getAllStudentPayment(pageNumber, pageSize, sortBy, sortDir);
+        List<PaymentManagerService> studentPaymentResponse = this.studentPaymentService.getAllStudentPayment(startDate, endDate);
+        return new ResponseEntity<>(studentPaymentResponse, HttpStatus.OK) ;
+    }
+
+    @GetMapping("/searchPayment")
+    public ResponseEntity<List<PaymentManagerService>> sortPayment(
+            @RequestParam(value = "startDate", defaultValue = "2022-02-10", required = true) String startDate,
+            @RequestParam(value = "endDate", defaultValue = "2022-02-18", required = true) String endDate,
+            @RequestParam(value = "studentName", defaultValue = "THPT", required = false) String studentName
+    ){
+        List<PaymentManagerService> studentPaymentResponse = this.studentPaymentService.searchPaymentByStudentName(startDate, endDate, studentName);
+        return new ResponseEntity<>(studentPaymentResponse, HttpStatus.OK) ;
+    }
+
+    @GetMapping("/sortPayment")
+    public ResponseEntity<List<PaymentManagerService>> sortPayment(
+            @RequestParam(value = "startDate", defaultValue = "2022-02-10", required = true) String startDate,
+            @RequestParam(value = "endDate", defaultValue = "2022-02-18", required = true) String endDate,
+            @RequestParam(value = "classLevel", defaultValue = "THPT", required = false) String classLevel,
+            @RequestParam(value = "classGrade", defaultValue = "5", required = false) String classGrade,
+            @RequestParam(value = "className", defaultValue = "5A", required = false) String className
+    ){
+        List<PaymentManagerService> studentPaymentResponse = this.studentPaymentService.sortPayment(startDate, endDate, classLevel, classGrade, className);
         return new ResponseEntity<>(studentPaymentResponse, HttpStatus.OK) ;
     }
 
@@ -58,5 +89,27 @@ public class StudentPaymentController {
             @RequestParam(value = "studentId", required = false) Integer studentId){
         Integer totalPayment = this.studentPaymentService.getMonthlyPayment(startDate, endDate, studentId);
         return totalPayment;
+    }
+
+    @GetMapping("/getTotalMeal")
+    public Integer getTotalMeal(
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate,
+            @RequestParam(value = "studentId", required = false) Integer studentId
+    ){
+        Integer groupId = this.gsRepo.findStudentGroupId(studentId);
+        Integer groupScheduleId = this.gsRepo.findStudentGroupScheduleId(groupId);
+        Integer totalGsMeal = this.payRepo.countGroupScheduleMeal(startDate, endDate,groupScheduleId);
+        Integer totalSMeal  = this.payRepo.countStudentDeleteMeal(studentId);
+        return totalGsMeal - totalSMeal;
+    }
+
+    @GetMapping("/getTotalFoodAmount")
+    public ResponseEntity<List<FoodAmountReturnService>> getTotalMeal(
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate
+    ){
+        List<FoodAmountReturnService> totalFoodAmount = this.payRepo.countTotalFoodAmount(startDate, endDate);
+        return new ResponseEntity<>(totalFoodAmount, HttpStatus.OK);
     }
 }

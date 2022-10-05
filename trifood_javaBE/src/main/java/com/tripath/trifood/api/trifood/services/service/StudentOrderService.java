@@ -4,8 +4,6 @@ import com.tripath.trifood.api.trifood.dto.StudentOrderDto;
 import com.tripath.trifood.api.trifood.response.StudentOrderResponse;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 @Service
 public interface StudentOrderService {
 

@@ -12,5 +12,5 @@ public interface MealRepository extends JpaRepository<Meal, Long> {
             "FROM ((eating_group_schedules s INNER JOIN meal m ON s.e_group_schedule_id  =  m.e_group_schedule_id) " +
             "INNER JOIN food f ON m.food_id = f.food_id) " +
             "WHERE (meal_date BETWEEN ? AND ?) AND m.e_group_schedule_id = ?", nativeQuery = true)
-    public List<ScheduleReturnService> getMealFood(String startDate, String endDate, Integer groupScheduleId);
+    List<ScheduleReturnService> getMealFood(String startDate, String endDate, Integer groupScheduleId);
 }
