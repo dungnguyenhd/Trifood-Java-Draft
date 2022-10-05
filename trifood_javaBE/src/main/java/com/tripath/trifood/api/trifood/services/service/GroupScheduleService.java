@@ -19,7 +19,5 @@ public interface GroupScheduleService {
 
     GroupScheduleDto getGroupScheduleById(Integer groupScheduleId);
 
-    Integer getDailyPayment(String mealDate, Integer groupId);
-
-    List<GroupScheduleDto> findGroupSchedule(String startDate, String endDate, Integer groupId);
+    Integer getTotalPayment(String startDate, String endDate, Integer groupId);
 }

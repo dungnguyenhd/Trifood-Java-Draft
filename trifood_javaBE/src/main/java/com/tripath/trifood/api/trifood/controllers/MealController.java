@@ -63,9 +63,10 @@ public class MealController {
     @GetMapping("/findMealFood")
     public List<ScheduleReturnService> getMealFood(
             @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "endDate", required = false) String endDate
+            @RequestParam(value = "endDate", required = false) String endDate,
+            @RequestParam(value = "groupScheduleId", required = false) Integer groupScheduleId
     ){
-        List<ScheduleReturnService> result = this.mealRepo.getMealFood(startDate, endDate);
+        List<ScheduleReturnService> result = this.mealRepo.getMealFood(startDate, endDate, groupScheduleId);
         return result;
     }
 }

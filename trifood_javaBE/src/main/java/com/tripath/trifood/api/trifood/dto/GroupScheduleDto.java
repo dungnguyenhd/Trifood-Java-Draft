@@ -24,7 +24,7 @@ public class GroupScheduleDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private Date eGroupScheduleEndDate;
 
-    private Integer eGroupDailyPayment;
+    private Integer eGroupTotalPayment;
 
     private EGroup eGroup;
 }

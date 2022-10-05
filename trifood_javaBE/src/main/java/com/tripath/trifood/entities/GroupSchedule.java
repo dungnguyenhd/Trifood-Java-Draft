@@ -30,8 +30,8 @@ public class GroupSchedule implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private Date eGroupScheduleEndDate;
 
-    @Column(name = "eGroup_daily_payment")
-    private Integer eGroupDailyPayment;
+    @Column(name = "eGroup_total_payment")
+    private Integer eGroupTotalPayment;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "eGroup_id", referencedColumnName = "eGroup_id")

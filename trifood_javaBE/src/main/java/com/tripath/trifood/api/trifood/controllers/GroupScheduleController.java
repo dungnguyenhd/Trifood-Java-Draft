@@ -4,6 +4,8 @@ import com.tripath.trifood.api.trifood.dto.GroupScheduleDto;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.response.GroupScheduleResponse;
 import com.tripath.trifood.api.trifood.services.service.GroupScheduleService;
+import com.tripath.trifood.entities.GroupSchedule;
+import com.tripath.trifood.repositories.trifood.GroupScheduleRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,9 @@ public class GroupScheduleController {
 
     @Autowired
     private GroupScheduleService groupScheduleService;
+
+    @Autowired
+    private GroupScheduleRespository gRepo;
 
     @PostMapping("")
     public ResponseEntity<GroupScheduleDto> createGroupSchedule(@RequestBody GroupScheduleDto groupScheduleDto) throws ParseException {
@@ -55,19 +60,28 @@ public class GroupScheduleController {
     }
 
     @GetMapping("/getPayment")
-    public Integer getDailyPayment(@RequestParam(value = "mealDate",required = false) String mealDate,
+    public Integer getTotalPayment(@RequestParam(value = "startDate",required = false) String startDate,
+                                   @RequestParam(value = "endDate",required = false) String endDate,
                                    @RequestParam(value = "groupId",required = false) Integer groupId){
-        Integer dailyPayment = this.groupScheduleService.getDailyPayment(mealDate, groupId);
-        return dailyPayment;
+        Integer totalPayment = this.groupScheduleService.getTotalPayment(startDate, endDate, groupId);
+        return totalPayment;
     }
 
-    @GetMapping("/findGroupSchedule")
-    public ResponseEntity<List<GroupScheduleDto>> getAllGroupSchedules(
-            @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "endDate", required = false) String endDate,
-            @RequestParam(value = "groupId", required = false) Integer groupId
+    @GetMapping("/findGroupScheduleByGroupName")
+    public ResponseEntity<GroupSchedule> findGroupSchedule(
+            @RequestParam(value = "groupName", required = false) String groupName
     ){
-        List<GroupScheduleDto> groupSchedules = this.groupScheduleService.findGroupSchedule(startDate, endDate, groupId);
+        Integer id = gRepo.findGroupId(groupName);
+        GroupSchedule groupSchedules = this.gRepo.findGroupSchedule(id);
+        return new ResponseEntity<>(groupSchedules, HttpStatus.OK) ;
+    }
+
+    @GetMapping("/findStudentScheduleByStudentId")
+    public ResponseEntity<GroupSchedule> findStudentSchedule(
+            @RequestParam(value = "studentId", required = false) Integer studentId
+    ){
+        Integer groupId = this.gRepo.findStudentGroupId(studentId);
+        GroupSchedule groupSchedules = this.gRepo.findGroupSchedule(groupId);
         return new ResponseEntity<>(groupSchedules, HttpStatus.OK) ;
     }
 

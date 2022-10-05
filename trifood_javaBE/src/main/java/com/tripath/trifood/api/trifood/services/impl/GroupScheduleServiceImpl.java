@@ -42,7 +42,7 @@ public class GroupScheduleServiceImpl implements GroupScheduleService {
         groupSchedule.setEGroupScheduleStartDate(groupScheduleDto.getEGroupScheduleStartDate());
         groupSchedule.setEGroupScheduleEndDate(groupScheduleDto.getEGroupScheduleEndDate());
         groupSchedule.setEGroup(groupScheduleDto.getEGroup());
-        groupSchedule.setEGroupDailyPayment(groupScheduleDto.getEGroupDailyPayment());
+        groupSchedule.setEGroupTotalPayment(groupScheduleDto.getEGroupTotalPayment());
 
         GroupSchedule updatedGroupSchedule = this.groupScheduleRepo.save(groupSchedule);
         return this.modelMapper.map(updatedGroupSchedule, GroupScheduleDto.class);
@@ -81,15 +81,9 @@ public class GroupScheduleServiceImpl implements GroupScheduleService {
     }
 
     @Override
-    public Integer getDailyPayment(String mealDate, Integer groupId){
-        Integer dailyPayment = this.groupScheduleRepo.getTotalPayment(mealDate, groupId);
-        return dailyPayment;
+    public Integer getTotalPayment(String startDate, String endDate, Integer groupId){
+        Integer totalPayment = this.groupScheduleRepo.getTotalPayment(startDate, endDate, groupId);
+        return totalPayment;
     }
 
-    @Override
-    public List<GroupScheduleDto> findGroupSchedule(String startDate, String endDate, Integer groupId) {
-        List<GroupSchedule> groupSchedules = this.groupScheduleRepo.findGroupSchedule(startDate, endDate, groupId);
-        List<GroupScheduleDto> groupScheduleDtos = groupSchedules.stream().map((eGroupSchedule)->this.modelMapper.map(eGroupSchedule, GroupScheduleDto.class)).collect(Collectors.toList());
-        return groupScheduleDtos;
-    }
 }
