@@ -1,5 +1,6 @@
 package com.tripath.trifood.api.trifood.services.service;
 
+import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.dto.EGroupDto;
 import com.tripath.trifood.api.trifood.response.EGroupResponse;
 import org.springframework.stereotype.Service;

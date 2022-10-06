@@ -1,5 +1,6 @@
 package com.tripath.trifood.repositories.trifood;
 
+import com.tripath.trifood.api.trifood.services.service.FoodAmountReturnService;
 import com.tripath.trifood.api.trifood.services.service.ScheduleReturnService;
 import com.tripath.trifood.entities.Meal;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,9 @@ public interface MealRepository extends JpaRepository<Meal, Long> {
             "INNER JOIN food f ON m.food_id = f.food_id) " +
             "WHERE (meal_date BETWEEN ? AND ?) AND m.e_group_schedule_id = ?", nativeQuery = true)
     List<ScheduleReturnService> getMealFood(String startDate, String endDate, Integer groupScheduleId);
+
+    @Query(value = "SELECT food_name as FoodName, COUNT(m.food_id) as Amount " +
+            "FROM (meal m INNER JOIN food f ON m.food_id = f.food_id)" +
+            "WHERE (m.meal_date BETWEEN ? AND ?) GROUP BY food_name", nativeQuery = true)
+    List<FoodAmountReturnService> countTotalFoodAmount(String startDate, String endDate);
 }

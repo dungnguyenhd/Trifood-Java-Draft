@@ -3,6 +3,7 @@ package com.tripath.trifood.api.trifood.controllers;
 import com.tripath.trifood.api.trifood.dto.MealDto;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.response.MealResponse;
+import com.tripath.trifood.api.trifood.services.service.FoodAmountReturnService;
 import com.tripath.trifood.api.trifood.services.service.MealService;
 import com.tripath.trifood.api.trifood.services.service.ScheduleReturnService;
 import com.tripath.trifood.repositories.trifood.MealRepository;
@@ -67,5 +68,14 @@ public class MealController {
     ){
         List<ScheduleReturnService> result = this.mealRepo.getMealFood(startDate, endDate, groupScheduleId);
         return result;
+    }
+
+    @GetMapping("/getTotalFoodAmount")
+    public ResponseEntity<List<FoodAmountReturnService>> getTotalFoodAmount(
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate
+    ){
+        List<FoodAmountReturnService> totalFoodAmount = this.mealRepo.countTotalFoodAmount(startDate, endDate);
+        return new ResponseEntity<>(totalFoodAmount, HttpStatus.OK);
     }
 }

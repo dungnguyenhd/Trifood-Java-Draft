@@ -1,5 +1,6 @@
 package com.tripath.trifood.api.trifood.services.service;
 
+import com.tripath.trifood.api.student.dto.StudentDto;
 import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.response.EClassResponse;
 import org.springframework.stereotype.Service;
@@ -19,4 +20,10 @@ public interface EClassService {
     EClassDto getEClassById(Integer eClassId);
 
     List<EClassDto> searchEClass(String keyword);
+
+    List<EClassDto> findAllGroupClasses(Integer groupId);
+
+    List<StudentDto> findStudentsOfClass(Integer classId);
+
+    List<EClassDto> sortClass(String classLevel, String classGrade, String className, Integer startYear, Integer endYear);
 }

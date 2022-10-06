@@ -1,9 +1,11 @@
 package com.tripath.trifood.api.trifood.controllers;
 
+import com.tripath.trifood.api.student.dto.StudentDto;
 import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.response.EClassResponse;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.services.service.EClassService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +58,34 @@ public class EClassController {
     @GetMapping("/seach/{keyword}")
     public ResponseEntity<List<EClassDto>> searchEClassByName(@PathVariable("keyword") String keyword){
         List<EClassDto> result = this.eClassService.searchEClass(keyword);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/findAllGroupClasses")
+    public ResponseEntity<List<EClassDto>> findAllGroupClasses(
+            @RequestParam(value = "groupId", defaultValue = "1", required = false) Integer groupId
+    ){
+        List<EClassDto> result = this.eClassService.findAllGroupClasses(groupId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/findStudentsOfClass")
+    public ResponseEntity<List<StudentDto>> findStudentsOfClass(
+            @RequestParam(value = "classId", defaultValue = "1", required = false) Integer classId
+    ){
+        List<StudentDto> result = this.eClassService.findStudentsOfClass(classId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/sortClass")
+    public ResponseEntity<List<EClassDto>> sortClass(
+            @RequestParam(value = "classLevel", required = false) String classLevel,
+            @RequestParam(value = "classGrade", required = false) String classGrade,
+            @RequestParam(value = "className", required = false) String className,
+            @RequestParam(value = "startYear", required = false) Integer startYear,
+            @RequestParam(value = "endYear", required = false) Integer endYear
+    ){
+        List<EClassDto> result = this.eClassService.sortClass(classLevel, classGrade, className, startYear, endYear);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

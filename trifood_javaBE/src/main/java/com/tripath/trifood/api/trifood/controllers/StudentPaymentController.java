@@ -2,8 +2,6 @@ package com.tripath.trifood.api.trifood.controllers;
 
 import com.tripath.trifood.api.trifood.dto.StudentPaymentDto;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
-import com.tripath.trifood.api.trifood.response.StudentPaymentResponse;
-import com.tripath.trifood.api.trifood.services.service.FoodAmountReturnService;
 import com.tripath.trifood.api.trifood.services.service.PaymentManagerService;
 import com.tripath.trifood.api.trifood.services.service.StudentPaymentService;
 import com.tripath.trifood.repositories.trifood.GroupScheduleRespository;
@@ -82,8 +80,8 @@ public class StudentPaymentController {
         return new ResponseEntity<>(updatedStudentPayment, HttpStatus.OK);
     }
 
-    @GetMapping("/totalPayment")
-    public Integer getTotalPayment(
+    @GetMapping("/monthlyPayment")
+    public Integer getMonthlyPayment(
             @RequestParam(value = "startDate", required = false) String startDate,
             @RequestParam(value = "endDate", required = false) String endDate,
             @RequestParam(value = "studentId", required = false) Integer studentId){
@@ -102,14 +100,5 @@ public class StudentPaymentController {
         Integer totalGsMeal = this.payRepo.countGroupScheduleMeal(startDate, endDate,groupScheduleId);
         Integer totalSMeal  = this.payRepo.countStudentDeleteMeal(studentId);
         return totalGsMeal - totalSMeal;
-    }
-
-    @GetMapping("/getTotalFoodAmount")
-    public ResponseEntity<List<FoodAmountReturnService>> getTotalMeal(
-            @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "endDate", required = false) String endDate
-    ){
-        List<FoodAmountReturnService> totalFoodAmount = this.payRepo.countTotalFoodAmount(startDate, endDate);
-        return new ResponseEntity<>(totalFoodAmount, HttpStatus.OK);
     }
 }

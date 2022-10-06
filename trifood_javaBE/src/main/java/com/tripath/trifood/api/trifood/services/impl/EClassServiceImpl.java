@@ -1,9 +1,11 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
+import com.tripath.trifood.api.student.dto.StudentDto;
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
 import com.tripath.trifood.entities.EClass;
 import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.response.EClassResponse;
+import com.tripath.trifood.entities.Student;
 import com.tripath.trifood.repositories.trifood.EClassRepository;
 import com.tripath.trifood.api.trifood.services.service.EClassService;
 import org.modelmapper.ModelMapper;
@@ -82,5 +84,26 @@ public class EClassServiceImpl implements EClassService {
         List<EClass> eClasses = this.eClassRepo.searchByName("%"+keyword+"%");
         List<EClassDto> eClassDtos = eClasses.stream().map((eClass)->this.modelMapper.map(eClass, EClassDto.class)).collect(Collectors.toList());
         return eClassDtos;
+    }
+
+    @Override
+    public List<EClassDto> findAllGroupClasses(Integer groupId) {
+        List<EClass> listClasses = this.eClassRepo.findAllGroupClasses(groupId);
+        List<EClassDto> eClassDtos = listClasses.stream().map((eClass)->this.modelMapper.map(eClass, EClassDto.class)).collect(Collectors.toList());
+        return eClassDtos;
+    }
+
+    @Override
+    public List<EClassDto> sortClass(String classLevel, String classGrade, String className, Integer startYear, Integer endYear) {
+        List<EClass> listClasses = this.eClassRepo.sortClass(classLevel, classGrade, className, startYear, endYear);
+        List<EClassDto> eClassDtos = listClasses.stream().map((eClass)->this.modelMapper.map(eClass, EClassDto.class)).collect(Collectors.toList());
+        return eClassDtos;
+    }
+
+    @Override
+    public List<StudentDto> findStudentsOfClass(Integer classId) {
+        List<Student> listStudents = this.eClassRepo.findStudentsOfClass(classId);
+        List<StudentDto> listDto = listStudents.stream().map((student)->this.modelMapper.map(student, StudentDto.class)).collect(Collectors.toList());
+        return listDto;
     }
 }

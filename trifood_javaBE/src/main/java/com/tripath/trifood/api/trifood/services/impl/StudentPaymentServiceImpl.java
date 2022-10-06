@@ -4,17 +4,15 @@ import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
 import com.tripath.trifood.api.trifood.services.service.PaymentManagerService;
 import com.tripath.trifood.entities.StudentPayment;
 import com.tripath.trifood.api.trifood.dto.StudentPaymentDto;
-import com.tripath.trifood.api.trifood.response.StudentPaymentResponse;
+import com.tripath.trifood.repositories.trifood.GroupScheduleRespository;
 import com.tripath.trifood.repositories.trifood.StudentPaymentRepository;
 import com.tripath.trifood.api.trifood.services.service.StudentPaymentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -24,11 +22,25 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     private StudentPaymentRepository studentPaymentRepo;
 
     @Autowired
+    private GroupScheduleRespository scheduleRepo;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
     public StudentPaymentDto createStudentPayment(StudentPaymentDto studentPaymentDto) {
         StudentPayment studentPayment = this.modelMapper.map(studentPaymentDto, StudentPayment.class);
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String startDate = dateFormat.format(studentPayment.getPayStartDate());
+        String endDate = dateFormat.format(studentPayment.getPayEndDate());
+
+        Integer groupId = scheduleRepo.findStudentGroupId(studentPayment.getStudent().getId());
+        Integer schedulePayment = scheduleRepo.getTotalPayment(startDate, endDate, groupId);
+        Integer minusPayment = studentPaymentRepo.getMonthlyMinusPayment(startDate, endDate, studentPayment.getStudent().getId());
+
+        studentPayment.setTotalMoney(schedulePayment-minusPayment);
+
         StudentPayment newEgroup = this.studentPaymentRepo.save(studentPayment);
         return this.modelMapper.map(newEgroup, StudentPaymentDto.class);
     }
@@ -40,6 +52,8 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
         studentPayment.setPayDate(studentPaymentDto.getPayDate());
         studentPayment.setTotalMoney(studentPaymentDto.getTotalMoney());
         studentPayment.setStudent(studentPaymentDto.getStudent());
+        studentPayment.setPayStartDate(studentPaymentDto.getPayStartDate());
+        studentPayment.setPayEndDate(studentPaymentDto.getPayEndDate());
 
         StudentPayment updatedStudentPayment = this.studentPaymentRepo.save(studentPayment);
         return this.modelMapper.map(updatedStudentPayment, StudentPaymentDto.class);
@@ -77,7 +91,10 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
 
     @Override
     public Integer getMonthlyPayment(String startDate, String endDate, Integer studentId) {
-        Integer totalPayment = this.studentPaymentRepo.getMonthlyPayment(startDate, endDate, studentId);
-        return totalPayment;
+        Integer groupId = this.scheduleRepo.findStudentGroupId(studentId);
+        Integer schedulePayment = this.scheduleRepo.getTotalPayment(startDate, endDate, groupId);
+        Integer minusPayment = this.studentPaymentRepo.getMonthlyMinusPayment(startDate, endDate, studentId);
+
+        return schedulePayment - minusPayment;
     }
 }

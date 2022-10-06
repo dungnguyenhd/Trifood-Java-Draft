@@ -1,5 +1,7 @@
 package com.tripath.trifood.api.student.dto;
 
+import com.tripath.trifood.entities.EClass;
+import com.tripath.trifood.entities.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,5 +37,7 @@ public class StudentDto {
 
     private Float score;
 
-    private Set<RoleDto> roles = new HashSet<>();
+    private EClass eClass;
+//
+//    private Set<RoleDto> roles = new HashSet<>();
 }
