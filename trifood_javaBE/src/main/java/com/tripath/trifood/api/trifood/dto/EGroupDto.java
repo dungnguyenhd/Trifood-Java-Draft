@@ -14,6 +14,9 @@ public class EGroupDto {
     private Integer eGroupId;
 
     @NotEmpty
+    private String eGroupKey;
+
+    @NotEmpty
     private String eGroupName;
 
     @NotEmpty

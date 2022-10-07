@@ -21,6 +21,8 @@ public class EGroup {
     private Integer eGroupId;
     @Column(name = "eGroup_name")
     private String eGroupName;
+    @Column(name = "eGroup_key")
+    private String eGroupKey;
     @Column(name = "eGroup_start_year")
     private int eGroupStartYear;
     @Column(name = "eGroup_end_year")

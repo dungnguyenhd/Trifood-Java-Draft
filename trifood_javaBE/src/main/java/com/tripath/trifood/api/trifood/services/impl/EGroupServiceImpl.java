@@ -1,6 +1,5 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
-import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
 import com.tripath.trifood.entities.EGroup;
 import com.tripath.trifood.api.trifood.dto.EGroupDto;
@@ -40,6 +39,7 @@ public class EGroupServiceImpl implements EGroupService {
         eGroup.setEGroupName(eGroupDto.getEGroupName());
         eGroup.setEGroupStartYear(eGroupDto.getEGroupStartYear());
         eGroup.setEGroupEndYear(eGroupDto.getEGroupEndYear());
+        eGroup.setEGroupKey(eGroup.getEGroupKey());
 
         EGroup updatedEGroup = this.eGroupRepo.save(eGroup);
         return this.modelMapper.map(updatedEGroup, EGroupDto.class);
@@ -83,5 +83,4 @@ public class EGroupServiceImpl implements EGroupService {
         List<EGroupDto> eGroupDtos = eGroups.stream().map((eGroup)->this.modelMapper.map(eGroup, EGroupDto.class)).collect(Collectors.toList());
         return eGroupDtos;
     }
-
 }
