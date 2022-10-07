@@ -4,8 +4,6 @@ import com.tripath.trifood.api.trifood.dto.StudentPaymentDto;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.services.service.PaymentManagerService;
 import com.tripath.trifood.api.trifood.services.service.StudentPaymentService;
-import com.tripath.trifood.repositories.trifood.GroupScheduleRespository;
-import com.tripath.trifood.repositories.trifood.StudentPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +16,6 @@ import java.util.List;
 public class StudentPaymentController {
     @Autowired
     private StudentPaymentService studentPaymentService;
-
-    @Autowired
-    private GroupScheduleRespository gsRepo;
-
-    @Autowired
-    private StudentPaymentRepository payRepo;
 
     @PostMapping("")
     public ResponseEntity<StudentPaymentDto> createStudentPayment(@RequestBody StudentPaymentDto studentPaymentDto){
@@ -89,16 +81,13 @@ public class StudentPaymentController {
         return totalPayment;
     }
 
-    @GetMapping("/getTotalMeal")
+    @GetMapping("/getStudentTotalMeal")
     public Integer getTotalMeal(
             @RequestParam(value = "startDate", required = false) String startDate,
             @RequestParam(value = "endDate", required = false) String endDate,
             @RequestParam(value = "studentId", required = false) Integer studentId
     ){
-        Integer groupId = this.gsRepo.findStudentGroupId(studentId);
-        Integer groupScheduleId = this.gsRepo.findStudentGroupScheduleId(groupId);
-        Integer totalGsMeal = this.payRepo.countGroupScheduleMeal(startDate, endDate,groupScheduleId);
-        Integer totalSMeal  = this.payRepo.countStudentDeleteMeal(studentId);
-        return totalGsMeal - totalSMeal;
+        Integer totalMeal = this.studentPaymentService.getStudentTotalMeal(startDate, endDate, studentId);
+        return totalMeal;
     }
 }

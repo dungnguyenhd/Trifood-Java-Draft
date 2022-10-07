@@ -13,7 +13,7 @@ public interface EClassRepository extends JpaRepository<EClass, Integer> {
     List<EClass> searchByName(String search);
 
     @Query(value = "SELECT * FROM eating_classes WHERE e_group_id = ?", nativeQuery = true)
-    List<EClass> findAllGroupClasses(Integer groupId);
+    List<EClass> findClassesOfGroup(Integer groupId);
 
     @Query(value = "SELECT * FROM students WHERE e_class_e_class_id = ?", nativeQuery = true)
     List<Student> findStudentsOfClass(Integer classId);

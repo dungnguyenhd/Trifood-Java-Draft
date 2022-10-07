@@ -21,7 +21,7 @@ public interface EClassService {
 
     List<EClassDto> searchEClass(String keyword);
 
-    List<EClassDto> findAllGroupClasses(Integer groupId);
+    List<EClassDto> findClassesOfGroup(Integer groupId);
 
     List<StudentDto> findStudentsOfClass(Integer classId);
 

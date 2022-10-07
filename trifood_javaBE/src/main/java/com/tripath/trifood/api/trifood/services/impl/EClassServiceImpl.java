@@ -87,8 +87,8 @@ public class EClassServiceImpl implements EClassService {
     }
 
     @Override
-    public List<EClassDto> findAllGroupClasses(Integer groupId) {
-        List<EClass> listClasses = this.eClassRepo.findAllGroupClasses(groupId);
+    public List<EClassDto> findClassesOfGroup(Integer groupId) {
+        List<EClass> listClasses = this.eClassRepo.findClassesOfGroup(groupId);
         List<EClassDto> eClassDtos = listClasses.stream().map((eClass)->this.modelMapper.map(eClass, EClassDto.class)).collect(Collectors.toList());
         return eClassDtos;
     }

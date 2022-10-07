@@ -1,6 +1,8 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
+import com.tripath.trifood.api.trifood.services.service.FoodAmountReturnService;
+import com.tripath.trifood.api.trifood.services.service.ScheduleReturnService;
 import com.tripath.trifood.entities.Meal;
 import com.tripath.trifood.api.trifood.dto.MealDto;
 import com.tripath.trifood.api.trifood.response.MealResponse;
@@ -69,6 +71,28 @@ public class MealServiceImpl implements MealService {
         mealResponse.setLastPage(pageMeal.isLast());
 
         return mealResponse;
+    }
+
+    @Override
+    public List<ScheduleReturnService> getMealFood(String startDate, String endDate, Integer groupScheduleId) {
+        try {
+            List<ScheduleReturnService> result = this.mealRepo.getMealFood(startDate, endDate, groupScheduleId);
+                return result;
+        }
+        catch (ResourceNotFoundException exception){
+            throw new ResourceNotFoundException("Food", "groupScheduleId", groupScheduleId, startDate, endDate);
+        }
+    }
+
+    @Override
+    public List<FoodAmountReturnService> countTotalFoodAmount(String startDate, String endDate) {
+        try {
+            List<FoodAmountReturnService> totalFoodAmount = this.mealRepo.countTotalFoodAmount(startDate, endDate);
+            return totalFoodAmount;
+        }
+        catch (ResourceNotFoundException exception){
+            throw new ResourceNotFoundException("Amount", "Date", startDate, endDate);
+        }
     }
 
     @Override

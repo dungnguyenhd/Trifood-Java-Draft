@@ -97,4 +97,19 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
 
         return schedulePayment - minusPayment;
     }
+
+    @Override
+    public Integer getStudentTotalMeal(String startDate, String endDate, Integer studentId) {
+        try {
+            Integer groupId = this.scheduleRepo.findStudentGroupId(studentId);
+            Integer groupScheduleId = this.scheduleRepo.findStudentGroupScheduleId(groupId);
+            Integer totalGsMeal = this.studentPaymentRepo.countGroupScheduleMeal(startDate, endDate,groupScheduleId);
+            Integer totalSMeal  = this.studentPaymentRepo.countStudentDeleteMeal(studentId);
+            return totalGsMeal - totalSMeal;
+        }
+        catch (ResourceNotFoundException exception){
+            throw new ResourceNotFoundException("Amount", "Date", studentId, startDate, endDate);
+        }
+
+    }
 }

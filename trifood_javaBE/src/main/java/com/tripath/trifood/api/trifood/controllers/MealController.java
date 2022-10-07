@@ -6,11 +6,11 @@ import com.tripath.trifood.api.trifood.response.MealResponse;
 import com.tripath.trifood.api.trifood.services.service.FoodAmountReturnService;
 import com.tripath.trifood.api.trifood.services.service.MealService;
 import com.tripath.trifood.api.trifood.services.service.ScheduleReturnService;
-import com.tripath.trifood.repositories.trifood.MealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -19,9 +19,6 @@ public class MealController {
 
     @Autowired
     private MealService mealService;
-
-    @Autowired
-    private MealRepository mealRepo;
 
     @PostMapping("")
     public ResponseEntity<MealDto> createMeal(@RequestBody MealDto mealDto){
@@ -66,8 +63,8 @@ public class MealController {
             @RequestParam(value = "endDate", required = false) String endDate,
             @RequestParam(value = "groupScheduleId", required = false) Integer groupScheduleId
     ){
-        List<ScheduleReturnService> result = this.mealRepo.getMealFood(startDate, endDate, groupScheduleId);
-        return result;
+            List<ScheduleReturnService> result = this.mealService.getMealFood(startDate, endDate, groupScheduleId);
+            return result;
     }
 
     @GetMapping("/getTotalFoodAmount")
@@ -75,7 +72,7 @@ public class MealController {
             @RequestParam(value = "startDate", required = false) String startDate,
             @RequestParam(value = "endDate", required = false) String endDate
     ){
-        List<FoodAmountReturnService> totalFoodAmount = this.mealRepo.countTotalFoodAmount(startDate, endDate);
+        List<FoodAmountReturnService> totalFoodAmount = this.mealService.countTotalFoodAmount(startDate, endDate);
         return new ResponseEntity<>(totalFoodAmount, HttpStatus.OK);
     }
 }

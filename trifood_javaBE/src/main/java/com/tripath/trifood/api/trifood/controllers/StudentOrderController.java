@@ -4,16 +4,10 @@ import com.tripath.trifood.api.trifood.dto.StudentOrderDto;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.response.StudentOrderResponse;
 import com.tripath.trifood.api.trifood.services.service.StudentOrderService;
-import com.tripath.trifood.repositories.trifood.StudentOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/studentOrder")
@@ -21,9 +15,6 @@ public class StudentOrderController {
 
     @Autowired
     private StudentOrderService studentOrderService;
-
-    @Autowired
-    private StudentOrderRepository orderRepo;
 
     @PostMapping("")
     public ResponseEntity<StudentOrderDto> createStudentOrder(@RequestBody StudentOrderDto studentOrderDto){
@@ -55,14 +46,19 @@ public class StudentOrderController {
     }
 
     @PutMapping("/{studentOrderId}")
-    public ResponseEntity<StudentOrderDto> updateStudentOrder(@RequestBody StudentOrderDto studentOrderDto, @PathVariable Long studentOrderId){
+    public ResponseEntity<StudentOrderDto> updateStudentOrder(@RequestBody StudentOrderDto studentOrderDto, @PathVariable Long studentOrderId)
+    {
         StudentOrderDto updatedStudentOrder = this.studentOrderService.updateStudentOrder(studentOrderDto, studentOrderId);
         return new ResponseEntity<>(updatedStudentOrder, HttpStatus.OK);
     }
 
-    @GetMapping("/minusPayment/{mealName}/{groupId}/{mealDate}")
-    public Integer getMinusPayment(@PathVariable String mealName, @PathVariable Integer groupId, @PathVariable String mealDate){
-        Integer minusPayment = orderRepo.getMinusPayment(mealName, groupId, mealDate);
+    @GetMapping("/minusPayment")
+    public Integer getMinusPayment(
+            @RequestParam(value = "mealName", required = false) String mealName,
+            @RequestParam(value = "studentId", required = false) Integer studentId,
+            @RequestParam(value = "mealDate", required = false) String mealDate)
+    {
+        Integer minusPayment = this.studentOrderService.getMinusPayment(mealName, studentId, mealDate);
         return minusPayment;
     }
 }

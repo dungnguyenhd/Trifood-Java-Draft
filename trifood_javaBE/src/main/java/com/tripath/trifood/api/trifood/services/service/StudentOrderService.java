@@ -17,7 +17,5 @@ public interface StudentOrderService {
 
     StudentOrderDto getStudentOrderById(Long studentOrderId);
 
-    Integer getStudentGroup(Integer studentId);
-
-    public Integer getTotalMinusPayment(String meal_name, Integer groupId, String scheduleDate);
+    public Integer getMinusPayment(String meal_name, Integer groupId, String scheduleDate);
 }

@@ -89,14 +89,14 @@ public class StudentOrderServiceImpl implements StudentOrderService {
     }
 
     @Override
-    public Integer getStudentGroup(Integer studentId) {
-        Integer groupId = this.studentOrderRepo.getStudentGroup(studentId);
-        return groupId;
-    }
-
-    @Override
-    public Integer getTotalMinusPayment(String meal_name, Integer groupId, String mealDate) {
-        Integer minusPayment = this.studentOrderRepo.getMinusPayment(meal_name, groupId, mealDate);
-        return minusPayment;
+    public Integer getMinusPayment(String mealName, Integer studentId, String mealDate) {
+        try {
+            Integer groupId = this.studentOrderRepo.getStudentGroup(studentId);
+            Integer minusPayment = studentOrderRepo.getMinusPayment(mealName, groupId, mealDate);
+            return minusPayment;
+        }
+        catch (ResourceNotFoundException exception){
+            throw new ResourceNotFoundException("MealNAme", "Meal", studentId, mealName, mealDate);
+        }
     }
 }

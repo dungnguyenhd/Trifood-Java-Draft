@@ -5,7 +5,6 @@ import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.response.EClassResponse;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.services.service.EClassService;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,11 +60,11 @@ public class EClassController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/findAllGroupClasses")
+    @GetMapping("/findClassesOfGroup")
     public ResponseEntity<List<EClassDto>> findAllGroupClasses(
             @RequestParam(value = "groupId", defaultValue = "1", required = false) Integer groupId
     ){
-        List<EClassDto> result = this.eClassService.findAllGroupClasses(groupId);
+        List<EClassDto> result = this.eClassService.findClassesOfGroup(groupId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

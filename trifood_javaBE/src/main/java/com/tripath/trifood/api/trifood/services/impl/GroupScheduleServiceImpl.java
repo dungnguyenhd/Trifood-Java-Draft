@@ -79,6 +79,20 @@ public class GroupScheduleServiceImpl implements GroupScheduleService {
     }
 
     @Override
+    public GroupSchedule findGroupScheduleByGroupName(String groupName) {
+        Integer id = groupScheduleRepo.findGroupId(groupName);
+        GroupSchedule groupSchedules = this.groupScheduleRepo.findGroupSchedule(id);
+        return groupSchedules;
+    }
+
+    @Override
+    public GroupSchedule findStudentScheduleByStudentId(Integer studentId) {
+        Integer groupId = this.groupScheduleRepo.findStudentGroupId(studentId);
+        GroupSchedule groupSchedules = this.groupScheduleRepo.findGroupSchedule(groupId);
+        return groupSchedules;
+    }
+
+    @Override
     public Integer getTotalPayment(String startDate, String endDate, Integer groupId){
         Integer totalPayment = this.groupScheduleRepo.getTotalPayment(startDate, endDate, groupId);
         return totalPayment;

@@ -3,6 +3,7 @@ package com.tripath.trifood.api.trifood.services.service;
 import com.tripath.trifood.api.trifood.dto.StudentPaymentDto;
 import com.tripath.trifood.api.trifood.response.StudentPaymentResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface StudentPaymentService {
     StudentPaymentDto getStudentPaymentById(Long studentPaymentId);
 
     Integer getMonthlyPayment(String startDate, String endDate, Integer studentId);
+
+    Integer getStudentTotalMeal(String startDate, String endDate, Integer studentId);
 }
