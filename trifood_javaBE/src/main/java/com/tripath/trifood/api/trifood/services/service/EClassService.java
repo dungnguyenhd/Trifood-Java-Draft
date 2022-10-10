@@ -21,9 +21,9 @@ public interface EClassService {
 
     List<EClassDto> searchEClass(String keyword);
 
-    List<EClassDto> findClassesOfGroup(Integer groupId);
+    EClassResponse findClassesOfGroup(Integer groupId, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
     List<StudentDto> findStudentsOfClass(Integer classId);
 
-    List<EClassDto> sortClass(String classLevel, String classGrade, String className, Integer startYear, Integer endYear);
+    EClassResponse sortClass(String classLevel, String classGrade, String className, Integer startYear, Integer endYear, Integer pageNumber, Integer pageSize);
 }

@@ -1,6 +1,5 @@
 package com.tripath.trifood.api.trifood.services.service;
 
-import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.dto.EGroupDto;
 import com.tripath.trifood.api.trifood.response.EGroupResponse;
 import org.springframework.stereotype.Service;
@@ -19,5 +18,5 @@ public interface EGroupService {
 
     EGroupDto getEGroupById(Integer eGroupId);
 
-    List<EGroupDto> searchEGroup(String keyword);
+    EGroupResponse searchEGroup(String keyword, Integer pageNumber, Integer pageSize);
 }

@@ -1,7 +1,7 @@
 package com.tripath.trifood.api.trifood.services.service;
 
 public interface PaymentManagerService {
-    String getStudentName();
+    String getFullName();
 
     Integer getTotalMoney();
 

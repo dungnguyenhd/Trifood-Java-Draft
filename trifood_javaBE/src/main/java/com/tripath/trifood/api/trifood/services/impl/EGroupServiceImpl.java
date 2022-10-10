@@ -78,9 +78,19 @@ public class EGroupServiceImpl implements EGroupService {
     }
 
     @Override
-    public List<EGroupDto> searchEGroup(String keyword) {
-        List<EGroup> eGroups = this.eGroupRepo.searchByName("%"+keyword+"%");
+    public EGroupResponse searchEGroup(String keyword, Integer pageNumber, Integer pageSize) {
+        Pageable p = PageRequest.of(pageNumber, pageSize);
+        Page<EGroup> eGroups = this.eGroupRepo.searchByName("%"+keyword+"%", p);
+        List<EGroup> allEGroup = eGroups.getContent();
         List<EGroupDto> eGroupDtos = eGroups.stream().map((eGroup)->this.modelMapper.map(eGroup, EGroupDto.class)).collect(Collectors.toList());
-        return eGroupDtos;
+
+        EGroupResponse eGroupResponse = new EGroupResponse();
+        eGroupResponse.setContent(eGroupDtos);
+        eGroupResponse.setPageNumber(eGroups.getNumber());
+        eGroupResponse.setTotalElements(eGroups.getTotalElements());
+        eGroupResponse.setTotalPages(eGroups.getTotalPages());
+        eGroupResponse.setLastPage(eGroups.isLast());
+
+        return eGroupResponse;
     }
 }

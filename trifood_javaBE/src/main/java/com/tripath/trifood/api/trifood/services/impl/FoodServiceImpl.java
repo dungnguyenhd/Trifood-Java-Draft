@@ -77,9 +77,21 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<FoodDto> searchFood(String keyword) {
-        List<Food> foods = this.foodRepo.searchByName("%"+keyword+"%");
+    public FoodResponse searchFood(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Food> foods = this.foodRepo.searchByName("%"+keyword+"%", p);
+        List<Food> allFood = foods.getContent();
         List<FoodDto> foodDtos = foods.stream().map((food)->this.modelMapper.map(food, FoodDto.class)).collect(Collectors.toList());
-        return foodDtos;
+
+        FoodResponse foodResponse = new FoodResponse();
+        foodResponse.setContent(foodDtos);
+        foodResponse.setPageNumber(foods.getNumber());
+        foodResponse.setTotalElements(foods.getTotalElements());
+        foodResponse.setTotalPages(foods.getTotalPages());
+        foodResponse.setLastPage(foods.isLast());
+
+        return foodResponse;
     }
 }

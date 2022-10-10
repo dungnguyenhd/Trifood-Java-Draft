@@ -15,11 +15,11 @@ public interface StudentPaymentService {
 
     void deleteStudentPayment(Long studentPaymentId);
 
-    List<PaymentManagerService> getAllStudentPayment(String startDate, String endDate);
+    StudentPaymentResponse getAllStudentPayment(String startDate, String endDate, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
-    List<PaymentManagerService> sortPayment(String startDate, String endDate, String classLevel, String classGrade, String className);
+    StudentPaymentResponse sortPayment(String startDate, String endDate, String classLevel, String classGrade, String className, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
-    List<PaymentManagerService> searchPaymentByStudentName(String startDate, String endDate, String studentName);
+    StudentPaymentResponse searchPaymentByStudentName(String startDate, String endDate, String studentName, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
     StudentPaymentDto getStudentPaymentById(Long studentPaymentId);
 

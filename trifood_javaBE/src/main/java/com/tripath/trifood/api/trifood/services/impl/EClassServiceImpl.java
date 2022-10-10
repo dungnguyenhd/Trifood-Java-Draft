@@ -87,17 +87,35 @@ public class EClassServiceImpl implements EClassService {
     }
 
     @Override
-    public List<EClassDto> findClassesOfGroup(Integer groupId) {
-        List<EClass> listClasses = this.eClassRepo.findClassesOfGroup(groupId);
+    public EClassResponse findClassesOfGroup(Integer groupId, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
+        Page<EClass> listClasses = this.eClassRepo.findClassesOfGroup(groupId, p);
+        List<EClass> allEClass = listClasses.getContent();
         List<EClassDto> eClassDtos = listClasses.stream().map((eClass)->this.modelMapper.map(eClass, EClassDto.class)).collect(Collectors.toList());
-        return eClassDtos;
+        EClassResponse eClassResponse = new EClassResponse();
+        eClassResponse.setContent(eClassDtos);
+        eClassResponse.setPageNumber(listClasses.getNumber());
+        eClassResponse.setTotalElements(listClasses.getTotalElements());
+        eClassResponse.setTotalPages(listClasses.getTotalPages());
+        eClassResponse.setLastPage(listClasses.isLast());
+
+        return eClassResponse;
     }
 
     @Override
-    public List<EClassDto> sortClass(String classLevel, String classGrade, String className, Integer startYear, Integer endYear) {
-        List<EClass> listClasses = this.eClassRepo.sortClass(classLevel, classGrade, className, startYear, endYear);
+    public EClassResponse sortClass(String classLevel, String classGrade, String className, Integer startYear, Integer endYear, Integer pageNumber, Integer pageSize) {
+        Pageable p = PageRequest.of(pageNumber, pageSize);
+        Page<EClass> listClasses = this.eClassRepo.sortClass(classLevel, classGrade, className, startYear, endYear, p);
         List<EClassDto> eClassDtos = listClasses.stream().map((eClass)->this.modelMapper.map(eClass, EClassDto.class)).collect(Collectors.toList());
-        return eClassDtos;
+        EClassResponse eClassResponse = new EClassResponse();
+        eClassResponse.setContent(eClassDtos);
+        eClassResponse.setPageNumber(listClasses.getNumber());
+        eClassResponse.setTotalElements(listClasses.getTotalElements());
+        eClassResponse.setTotalPages(listClasses.getTotalPages());
+        eClassResponse.setLastPage(listClasses.isLast());
+
+        return eClassResponse;
     }
 
     @Override

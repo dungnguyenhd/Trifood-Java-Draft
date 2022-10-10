@@ -61,10 +61,14 @@ public class EClassController {
     }
 
     @GetMapping("/findClassesOfGroup")
-    public ResponseEntity<List<EClassDto>> findAllGroupClasses(
-            @RequestParam(value = "groupId", defaultValue = "1", required = false) Integer groupId
+    public ResponseEntity<EClassResponse> findClassesOfGroup(
+            @RequestParam(value = "groupId", defaultValue = "1", required = false) Integer groupId,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy",defaultValue = "e_class_id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ){
-        List<EClassDto> result = this.eClassService.findClassesOfGroup(groupId);
+        EClassResponse result = this.eClassService.findClassesOfGroup(groupId, pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -77,14 +81,16 @@ public class EClassController {
     }
 
     @GetMapping("/sortClass")
-    public ResponseEntity<List<EClassDto>> sortClass(
+    public ResponseEntity<EClassResponse> sortClass(
             @RequestParam(value = "classLevel", required = false) String classLevel,
             @RequestParam(value = "classGrade", required = false) String classGrade,
             @RequestParam(value = "className", required = false) String className,
             @RequestParam(value = "startYear", required = false) Integer startYear,
-            @RequestParam(value = "endYear", required = false) Integer endYear
+            @RequestParam(value = "endYear", required = false) Integer endYear,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize
     ){
-        List<EClassDto> result = this.eClassService.sortClass(classLevel, classGrade, className, startYear, endYear);
+        EClassResponse result = this.eClassService.sortClass(classLevel, classGrade, className, startYear, endYear, pageNumber, pageSize);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

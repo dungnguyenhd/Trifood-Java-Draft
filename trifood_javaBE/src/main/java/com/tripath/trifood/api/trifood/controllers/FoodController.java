@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/food")
@@ -53,8 +52,14 @@ public class FoodController {
     }
 
     @GetMapping("/seach/{keyword}")
-    public ResponseEntity<List<FoodDto>> searchFoodByName(@PathVariable("keyword") String keyword){
-        List<FoodDto> result = this.foodService.searchFood(keyword);
+    public ResponseEntity<FoodResponse> searchFoodByName(
+            @PathVariable("keyword") String keyword,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy",defaultValue = "food_name", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir)
+    {
+        FoodResponse result = this.foodService.searchFood(keyword, pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

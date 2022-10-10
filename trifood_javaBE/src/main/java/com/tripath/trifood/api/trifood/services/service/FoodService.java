@@ -3,7 +3,6 @@ package com.tripath.trifood.api.trifood.services.service;
 import com.tripath.trifood.api.trifood.dto.FoodDto;
 import com.tripath.trifood.api.trifood.response.FoodResponse;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public interface FoodService {
@@ -17,5 +16,5 @@ public interface FoodService {
 
     FoodDto getFoodById(Integer foodId);
 
-    List<FoodDto> searchFood(String keyword);
+    FoodResponse searchFood(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 }

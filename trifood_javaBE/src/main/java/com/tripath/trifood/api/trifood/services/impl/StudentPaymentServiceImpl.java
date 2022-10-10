@@ -1,7 +1,12 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
+import com.tripath.trifood.api.trifood.dto.FoodDto;
+import com.tripath.trifood.api.trifood.dto.PaymentManagerDto;
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
+import com.tripath.trifood.api.trifood.response.FoodResponse;
+import com.tripath.trifood.api.trifood.response.StudentPaymentResponse;
 import com.tripath.trifood.api.trifood.services.service.PaymentManagerService;
+import com.tripath.trifood.entities.Food;
 import com.tripath.trifood.entities.StudentPayment;
 import com.tripath.trifood.api.trifood.dto.StudentPaymentDto;
 import com.tripath.trifood.repositories.trifood.GroupScheduleRespository;
@@ -9,11 +14,16 @@ import com.tripath.trifood.repositories.trifood.StudentPaymentRepository;
 import com.tripath.trifood.api.trifood.services.service.StudentPaymentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentPaymentServiceImpl implements StudentPaymentService {
@@ -66,21 +76,60 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     }
 
     @Override
-    public List<PaymentManagerService> getAllStudentPayment(String startDate, String endDate) {
-        List<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.getAllPayment(startDate, endDate);
-        return pageStudentPayment;
+    public StudentPaymentResponse getAllStudentPayment(String startDate, String endDate, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
+        Page<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.getAllPayment(startDate, endDate, p);
+        List<PaymentManagerService> allPayment = pageStudentPayment.getContent();
+        List<PaymentManagerDto> paymentDto = allPayment.stream().map((payment) -> this.modelMapper.map(payment, PaymentManagerDto.class)).collect(Collectors.toList());
+
+        StudentPaymentResponse paymentResponse = new StudentPaymentResponse();
+        paymentResponse.setContent(paymentDto);
+        paymentResponse.setPageNumber(pageStudentPayment.getNumber());
+        paymentResponse.setTotalElements(pageStudentPayment.getTotalElements());
+        paymentResponse.setTotalPages(pageStudentPayment.getTotalPages());
+        paymentResponse.setLastPage(pageStudentPayment.isLast());
+
+        return paymentResponse;
     }
 
     @Override
-    public List<PaymentManagerService> sortPayment(String startDate, String endDate, String classLevel, String classGrade, String className) {
-        List<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.sortPayment(startDate, endDate, classLevel, classGrade, className);
-        return pageStudentPayment;
+    public StudentPaymentResponse sortPayment(String startDate, String endDate, String classLevel, String classGrade, String className, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
+        Page<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.sortPayment(startDate, endDate, classLevel, classGrade, className, p);
+        List<PaymentManagerService> allPayment = pageStudentPayment.getContent();
+        List<PaymentManagerDto> paymentDto = allPayment.stream().map((payment) -> this.modelMapper.map(payment, PaymentManagerDto.class)).collect(Collectors.toList());
+
+        StudentPaymentResponse paymentResponse = new StudentPaymentResponse();
+        paymentResponse.setContent(paymentDto);
+        paymentResponse.setPageNumber(pageStudentPayment.getNumber());
+        paymentResponse.setTotalElements(pageStudentPayment.getTotalElements());
+        paymentResponse.setTotalPages(pageStudentPayment.getTotalPages());
+        paymentResponse.setLastPage(pageStudentPayment.isLast());
+
+        return paymentResponse;
     }
 
     @Override
-    public List<PaymentManagerService> searchPaymentByStudentName(String startDate, String endDate, String studentName) {
-        List<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.searchPaymentByStudentName(startDate, endDate, studentName);
-        return pageStudentPayment;
+    public StudentPaymentResponse searchPaymentByStudentName(String startDate, String endDate, String studentName, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
+        Page<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.searchPaymentByStudentName(startDate, endDate, studentName, p);
+        List<PaymentManagerService> allPayment = pageStudentPayment.getContent();
+        List<PaymentManagerDto> paymentDto = allPayment.stream().map((payment) -> this.modelMapper.map(payment, PaymentManagerDto.class)).collect(Collectors.toList());
+
+        StudentPaymentResponse paymentResponse = new StudentPaymentResponse();
+        paymentResponse.setContent(paymentDto);
+        paymentResponse.setPageNumber(pageStudentPayment.getNumber());
+        paymentResponse.setTotalElements(pageStudentPayment.getTotalElements());
+        paymentResponse.setTotalPages(pageStudentPayment.getTotalPages());
+        paymentResponse.setLastPage(pageStudentPayment.isLast());
+
+        return paymentResponse;
     }
 
     @Override
