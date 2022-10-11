@@ -55,8 +55,14 @@ public class EClassController {
     }
 
     @GetMapping("/seach/{keyword}")
-    public ResponseEntity<List<EClassDto>> searchEClassByName(@PathVariable("keyword") String keyword){
-        List<EClassDto> result = this.eClassService.searchEClass(keyword);
+    public ResponseEntity<EClassResponse> searchEClassByName(
+            @PathVariable("keyword") String keyword,
+                @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+                @RequestParam(value = "sortBy",defaultValue = "e_class_name", required = false) String sortBy,
+                @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir)
+    {
+        EClassResponse result = this.eClassService.searchEClass(keyword, pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

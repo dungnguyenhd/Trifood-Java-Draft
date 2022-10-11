@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface EClassRepository extends JpaRepository<EClass, Integer> {
     @Query(value ="SELECT * FROM eating_classes c WHERE c.e_class_name LIKE %?1%",nativeQuery = true)
-    List<EClass> searchByName(String search);
+    Page<EClass> searchByName(String search, Pageable pageable);
 
     @Query(value = "SELECT * FROM eating_classes WHERE e_group_id = ?", nativeQuery = true)
     Page<EClass> findClassesOfGroup(Integer groupId, Pageable pageable);

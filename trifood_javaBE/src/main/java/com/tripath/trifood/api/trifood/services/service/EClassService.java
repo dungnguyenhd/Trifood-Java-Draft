@@ -19,7 +19,7 @@ public interface EClassService {
 
     EClassDto getEClassById(Integer eClassId);
 
-    List<EClassDto> searchEClass(String keyword);
+    EClassResponse searchEClass(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
     EClassResponse findClassesOfGroup(Integer groupId, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 

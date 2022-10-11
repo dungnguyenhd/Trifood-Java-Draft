@@ -80,10 +80,19 @@ public class EClassServiceImpl implements EClassService {
     }
 
     @Override
-    public List<EClassDto> searchEClass(String keyword) {
-        List<EClass> eClasses = this.eClassRepo.searchByName("%"+keyword+"%");
+    public EClassResponse searchEClass(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
+        Page<EClass> eClasses = this.eClassRepo.searchByName("%"+keyword+"%", p);
         List<EClassDto> eClassDtos = eClasses.stream().map((eClass)->this.modelMapper.map(eClass, EClassDto.class)).collect(Collectors.toList());
-        return eClassDtos;
+        EClassResponse eClassResponse = new EClassResponse();
+        eClassResponse.setContent(eClassDtos);
+        eClassResponse.setPageNumber(eClasses.getNumber());
+        eClassResponse.setTotalElements(eClasses.getTotalElements());
+        eClassResponse.setTotalPages(eClasses.getTotalPages());
+        eClassResponse.setLastPage(eClasses.isLast());
+
+        return eClassResponse;
     }
 
     @Override
