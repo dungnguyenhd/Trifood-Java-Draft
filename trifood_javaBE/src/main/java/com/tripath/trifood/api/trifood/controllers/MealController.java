@@ -5,14 +5,12 @@ import com.tripath.trifood.api.trifood.dto.MealDto;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.services.service.customReturn.FoodAmountReturnService;
 import com.tripath.trifood.api.trifood.services.service.MealService;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/meal")

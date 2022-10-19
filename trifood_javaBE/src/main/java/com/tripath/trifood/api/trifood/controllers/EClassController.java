@@ -1,6 +1,5 @@
 package com.tripath.trifood.api.trifood.controllers;
 
-import com.tripath.trifood.api.student.dto.StudentDto;
 import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.response.EClassResponse;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
