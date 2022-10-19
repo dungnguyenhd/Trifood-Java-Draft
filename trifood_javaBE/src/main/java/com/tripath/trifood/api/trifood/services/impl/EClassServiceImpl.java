@@ -1,12 +1,10 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
-import com.tripath.trifood.api.student.dto.StudentDto;
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
 import com.tripath.trifood.entities.EClass;
 import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.response.EClassResponse;
-import com.tripath.trifood.entities.Student;
-import com.tripath.trifood.repositories.trifood.EClassRepository;
+import com.tripath.trifood.repositories.trifood.EClassRepo;
 import com.tripath.trifood.api.trifood.services.service.EClassService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,7 @@ import java.util.stream.Collectors;
 public class EClassServiceImpl implements EClassService {
 
     @Autowired
-    private EClassRepository eClassRepo;
+    private EClassRepo eClassRepo;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -36,7 +34,7 @@ public class EClassServiceImpl implements EClassService {
     }
 
     @Override
-    public EClassDto updateEClass(EClassDto eClassDto, Integer eClassId) {
+    public EClassDto updateEClass(EClassDto eClassDto, Long eClassId) {
         EClass eClass = this.eClassRepo.findById(eClassId).orElseThrow(()-> new ResourceNotFoundException("EatingClass", "eClassId", eClassId));
         eClass.setEClassName(eClassDto.getEClassName());
         eClass.setEClassGrade(eClassDto.getEClassGrade());
@@ -50,7 +48,7 @@ public class EClassServiceImpl implements EClassService {
     }
 
     @Override
-    public void deleteEClass(Integer eClassId) {
+    public void deleteEClass(Long eClassId) {
         EClass eClass = this.eClassRepo.findById(eClassId).orElseThrow(()-> new ResourceNotFoundException("EatingClass", "eClassId", eClassId));
         this.eClassRepo.delete(eClass);
     }
@@ -74,7 +72,7 @@ public class EClassServiceImpl implements EClassService {
     }
 
     @Override
-    public EClassDto getEClassById(Integer eClassId) {
+    public EClassDto getEClassById(Long eClassId) {
         EClass eClass = this.eClassRepo.findById(eClassId).orElseThrow(()-> new ResourceNotFoundException("EatingClass", "eClassId", eClassId));
         return this.modelMapper.map(eClass, EClassDto.class);
     }
@@ -96,7 +94,7 @@ public class EClassServiceImpl implements EClassService {
     }
 
     @Override
-    public EClassResponse findClassesOfGroup(Integer groupId, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+    public EClassResponse findClassesOfGroup(Long groupId, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
         Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable p = PageRequest.of(pageNumber, pageSize, sort);
         Page<EClass> listClasses = this.eClassRepo.findClassesOfGroup(groupId, p);
@@ -127,10 +125,10 @@ public class EClassServiceImpl implements EClassService {
         return eClassResponse;
     }
 
-    @Override
-    public List<StudentDto> findStudentsOfClass(Integer classId) {
-        List<Student> listStudents = this.eClassRepo.findStudentsOfClass(classId);
-        List<StudentDto> listDto = listStudents.stream().map((student)->this.modelMapper.map(student, StudentDto.class)).collect(Collectors.toList());
-        return listDto;
-    }
+//    @Override
+//    public List<StudentDto> findStudentsOfClass(Integer classId) {
+//        List<Student> listStudents = this.eClassRepo.findStudentsOfClass(classId);
+//        List<StudentDto> listDto = listStudents.stream().map((student)->this.modelMapper.map(student, StudentDto.class)).collect(Collectors.toList());
+//        return listDto;
+//    }
 }

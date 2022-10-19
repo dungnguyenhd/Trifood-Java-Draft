@@ -34,19 +34,19 @@ public class FoodController {
     }
 
     @GetMapping("/{foodId}")
-    public ResponseEntity<FoodDto> getFoodById(@PathVariable Integer foodId){
+    public ResponseEntity<FoodDto> getFoodById(@PathVariable Long foodId){
         FoodDto foodDto = this.foodService.getFoodById(foodId);
         return new ResponseEntity<>(foodDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{foodId}")
-    public ApiResponse deleteFood(@PathVariable Integer foodId){
+    public ApiResponse deleteFood(@PathVariable Long foodId){
         this.foodService.deleteFood(foodId);
         return new ApiResponse("Delete successful",true);
     }
 
     @PutMapping("/{foodId}")
-    public ResponseEntity<FoodDto> updateFood(@RequestBody FoodDto foodDto, @PathVariable Integer foodId){
+    public ResponseEntity<FoodDto> updateFood(@RequestBody FoodDto foodDto, @PathVariable Long foodId){
         FoodDto updatedFood = this.foodService.updateFood(foodDto, foodId);
         return new ResponseEntity<>(updatedFood, HttpStatus.OK);
     }

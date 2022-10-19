@@ -1,14 +1,11 @@
 package com.tripath.trifood.api.trifood.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tripath.trifood.entities.Student;
+import com.tripath.trifood.api.student.dto.Student;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -18,15 +15,7 @@ public class StudentPaymentDto {
 
     private Integer totalMoney;
 
-    private LocalDateTime payDate;
-
-    @NotEmpty
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private Date payStartDate;
-
-    @NotEmpty
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private Date payEndDate;
+    private LocalDateTime payMonth;
 
     private Student student;
 }

@@ -26,14 +26,14 @@ public class StudentController {
 	}
 	
 	@PutMapping("/{studentId}")
-	public ResponseEntity<StudentDto> updateStudent(@Valid @RequestBody StudentDto studentDto, @PathVariable("studentId") Integer uid){
+	public ResponseEntity<StudentDto> updateStudent(@Valid @RequestBody StudentDto studentDto, @PathVariable("studentId") Long uid){
 		StudentDto updatedStudent = this.studentService.updateStudent(studentDto, uid);
 		return ResponseEntity.ok(updatedStudent);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{studentId}")
-	public ResponseEntity<ApiResponse> deleteStudent(@PathVariable("studentId") Integer uid){
+	public ResponseEntity<ApiResponse> deleteStudent(@PathVariable("studentId") Long uid){
 		this.studentService.deleteStudent(uid);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Student deleted Successfully", true), HttpStatus.OK);
 	}
@@ -44,7 +44,7 @@ public class StudentController {
 	}
 	
 	@GetMapping("/{studentId}")
-	public ResponseEntity<StudentDto> getSingleStudent(@PathVariable Integer studentId){
+	public ResponseEntity<StudentDto> getSingleStudent(@PathVariable Long studentId){
 		return ResponseEntity.ok(this.studentService.getStudentById(studentId));
 	}
 }

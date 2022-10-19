@@ -1,19 +1,16 @@
 package com.tripath.trifood.api.student.dto;
 
 import com.tripath.trifood.entities.EClass;
-import com.tripath.trifood.entities.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.validation.constraints.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class StudentDto {
-    private int id;
+    private Long id;
 
     @NotEmpty
     @Size(min= 4, message = "Username must be min of 4 characters")

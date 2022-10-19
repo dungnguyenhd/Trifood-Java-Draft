@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 public interface FoodService {
     FoodDto createFood(FoodDto foodDto);
 
-    FoodDto updateFood(FoodDto foodDto, Integer foodId);
+    FoodDto updateFood(FoodDto foodDto, Long foodId);
 
-    void deleteFood(Integer foodId);
+    void deleteFood(Long foodId);
 
     FoodResponse getAllFood(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
-    FoodDto getFoodById(Integer foodId);
+    FoodDto getFoodById(Long foodId);
 
     FoodResponse searchFood(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 }

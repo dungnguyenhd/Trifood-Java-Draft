@@ -5,8 +5,8 @@ import com.tripath.trifood.api.student.repository.RoleRepository;
 import com.tripath.trifood.api.student.repository.StudentRepository;
 import com.tripath.trifood.common.config.AppConstants;
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
-import com.tripath.trifood.entities.Role;
-import com.tripath.trifood.entities.Student;
+import com.tripath.trifood.api.student.dto.Role;
+import com.tripath.trifood.api.student.dto.Student;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +35,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDto updateStudent(StudentDto studentDto, Integer studentId) {
+    public StudentDto updateStudent(StudentDto studentDto, Long studentId) {
         Student student = this.studentRepository.findById(studentId).orElseThrow(()-> new ResourceNotFoundException("Student", " Id", studentId));
         student.setName(studentDto.getName());
         student.setPassword(studentDto.getPassword());
@@ -50,7 +50,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDto getStudentById(Integer studentId) {
+    public StudentDto getStudentById(Long studentId) {
         Student student = this.studentRepository.findById(studentId).orElseThrow(()-> new ResourceNotFoundException("Student", " Id", 0));
         return this.studentToDto(student);
     }
@@ -63,7 +63,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudent(Integer studentId) {
+    public void deleteStudent(Long studentId) {
         Student student = this.studentRepository.findById(studentId).orElseThrow(()-> new ResourceNotFoundException("Student", " Id", studentId));
         this.studentRepository.delete(student);
     }

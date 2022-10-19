@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/eClass")
 public class EClassController {
@@ -37,19 +35,19 @@ public class EClassController {
     }
 
     @GetMapping("/{eClassId}")
-    public ResponseEntity<EClassDto> getEClassById(@PathVariable Integer eClassId){
+    public ResponseEntity<EClassDto> getEClassById(@PathVariable Long eClassId){
         EClassDto eClassDto = this.eClassService.getEClassById(eClassId);
         return new ResponseEntity<>(eClassDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{eClassId}")
-    public ApiResponse deleteEClass(@PathVariable Integer eClassId){
+    public ApiResponse deleteEClass(@PathVariable Long eClassId){
         this.eClassService.deleteEClass(eClassId);
         return new ApiResponse("Delete successful",true);
     }
 
     @PutMapping("/{eClassId}")
-    public ResponseEntity<EClassDto> updateEClass(@RequestBody EClassDto eClassDto, @PathVariable Integer eClassId){
+    public ResponseEntity<EClassDto> updateEClass(@RequestBody EClassDto eClassDto, @PathVariable Long eClassId){
         EClassDto updatedEClass = this.eClassService.updateEClass(eClassDto, eClassId);
         return new ResponseEntity<>(updatedEClass, HttpStatus.OK);
     }
@@ -68,21 +66,13 @@ public class EClassController {
 
     @GetMapping("/findClassesOfGroup")
     public ResponseEntity<EClassResponse> findClassesOfGroup(
-            @RequestParam(value = "groupId", defaultValue = "1", required = false) Integer groupId,
+            @RequestParam(value = "groupId", defaultValue = "1", required = false) Long groupId,
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
             @RequestParam(value = "sortBy",defaultValue = "e_class_id", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ){
         EClassResponse result = this.eClassService.findClassesOfGroup(groupId, pageNumber, pageSize, sortBy, sortDir);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-    @GetMapping("/findStudentsOfClass")
-    public ResponseEntity<List<StudentDto>> findStudentsOfClass(
-            @RequestParam(value = "classId", defaultValue = "1", required = false) Integer classId
-    ){
-        List<StudentDto> result = this.eClassService.findStudentsOfClass(classId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -99,4 +89,13 @@ public class EClassController {
         EClassResponse result = this.eClassService.sortClass(classLevel, classGrade, className, startYear, endYear, pageNumber, pageSize);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+//    @GetMapping("/findStudentsOfClass")
+//    public ResponseEntity<List<StudentDto>> findStudentsOfClass(
+//            @RequestParam(value = "classId", defaultValue = "1", required = false) Integer classId
+//    ){
+//        List<StudentDto> result = this.eClassService.findStudentsOfClass(classId);
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
+
 }

@@ -23,14 +23,9 @@ public class Meal implements Serializable {
     private Food food;
 
     @ManyToOne
-    @JoinColumn(name = "eGroup_schedule_id")
-    private GroupSchedule groupSchedule;
+    @JoinColumn(name = "e_daily_id")
+    private EDailySchedule eDailySchedule;
 
     @Column(name = "meal_name")
     private String mealName;
-
-    private int mealDay;
-
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private Date mealDate;
 }

@@ -1,15 +1,12 @@
 package com.tripath.trifood.api.trifood.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tripath.trifood.entities.Food;
-import com.tripath.trifood.entities.GroupSchedule;
+import com.tripath.trifood.entities.EDailySchedule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-
 
 @Getter
 @Setter
@@ -20,15 +17,8 @@ public class MealDto {
     private Food food;
 
     @NotNull
-    private GroupSchedule groupSchedule;
+    private EDailySchedule eDailySchedule;
 
     @NotEmpty
     private String mealName;
-
-    @NotEmpty
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private Date mealDate;
-
-    @NotEmpty
-    private int mealDay;
 }

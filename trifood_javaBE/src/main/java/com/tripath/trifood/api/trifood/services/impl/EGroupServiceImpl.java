@@ -1,11 +1,13 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
+import com.tripath.trifood.api.trifood.services.service.EGroupService;
 import com.tripath.trifood.entities.EGroup;
 import com.tripath.trifood.api.trifood.dto.EGroupDto;
 import com.tripath.trifood.api.trifood.response.EGroupResponse;
-import com.tripath.trifood.repositories.trifood.EGroupRepository;
-import com.tripath.trifood.api.trifood.services.service.EGroupService;
+import com.tripath.trifood.entities.WeekSchedule;
+import com.tripath.trifood.repositories.trifood.EGroupRepo;
+import com.tripath.trifood.repositories.trifood.WeekScheduleRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,27 +16,44 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
 public class EGroupServiceImpl implements EGroupService {
 
     @Autowired
-    private EGroupRepository eGroupRepo;
+    private EGroupRepo eGroupRepo;
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private WeekScheduleRepo weekScheduleRepo;
 
     @Override
     public EGroupDto createEGroup(EGroupDto eGroupDto) {
         EGroup eGroup = this.modelMapper.map(eGroupDto, EGroup.class);
         EGroup newEgroup = this.eGroupRepo.save(eGroup);
+        Calendar calendar = Calendar.getInstance(Locale.CHINESE);
+
+        while (calendar.get(Calendar.YEAR) == Calendar.getInstance(Locale.CHINESE).get(Calendar.YEAR)) {
+                WeekSchedule weekSchedule = new WeekSchedule();
+                calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                weekSchedule.setWeekNumber(calendar.get(Calendar.WEEK_OF_YEAR));
+                weekSchedule.setWeekMonth(calendar.get(Calendar.MONTH));
+                weekSchedule.setWeekYear(calendar.get(Calendar.YEAR));
+                weekSchedule.setEGroup(newEgroup);
+                this.weekScheduleRepo.save(weekSchedule);
+        }
         return this.modelMapper.map(newEgroup, EGroupDto.class);
     }
 
     @Override
-    public EGroupDto updateEGroup(EGroupDto eGroupDto, Integer eGroupId) {
+    public EGroupDto updateEGroup(EGroupDto eGroupDto, Long eGroupId) {
         EGroup eGroup = this.eGroupRepo.findById(eGroupId).orElseThrow(()-> new ResourceNotFoundException("EatingGroup", "eGroupId", eGroupId));
         eGroup.setEGroupName(eGroupDto.getEGroupName());
         eGroup.setEGroupStartYear(eGroupDto.getEGroupStartYear());
@@ -46,7 +65,7 @@ public class EGroupServiceImpl implements EGroupService {
     }
 
     @Override
-    public void deleteEGroup(Integer eGroupId) {
+    public void deleteEGroup(Long eGroupId) {
         EGroup eGroup = this.eGroupRepo.findById(eGroupId).orElseThrow(()-> new ResourceNotFoundException("EatingGroup", "eGroupId", eGroupId));
         this.eGroupRepo.delete(eGroup);
     }
@@ -72,7 +91,7 @@ public class EGroupServiceImpl implements EGroupService {
     }
 
     @Override
-    public EGroupDto getEGroupById(Integer eGroupId) {
+    public EGroupDto getEGroupById(Long eGroupId) {
         EGroup eGroup = this.eGroupRepo.findById(eGroupId).orElseThrow(()-> new ResourceNotFoundException("EatingGroup", "eGroupId", eGroupId));
         return this.modelMapper.map(eGroup, EGroupDto.class);
     }

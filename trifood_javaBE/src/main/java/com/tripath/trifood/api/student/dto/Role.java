@@ -1,4 +1,4 @@
-package com.tripath.trifood.entities;
+package com.tripath.trifood.api.student.dto;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -51,14 +51,4 @@ public class StudentOrderController {
         StudentOrderDto updatedStudentOrder = this.studentOrderService.updateStudentOrder(studentOrderDto, studentOrderId);
         return new ResponseEntity<>(updatedStudentOrder, HttpStatus.OK);
     }
-
-    @GetMapping("/minusPayment")
-    public Integer getMinusPayment(
-            @RequestParam(value = "mealName", required = false) String mealName,
-            @RequestParam(value = "studentId", required = false) Integer studentId,
-            @RequestParam(value = "mealDate", required = false) String mealDate)
-    {
-        Integer minusPayment = this.studentOrderService.getMinusPayment(mealName, studentId, mealDate);
-        return minusPayment;
-    }
 }

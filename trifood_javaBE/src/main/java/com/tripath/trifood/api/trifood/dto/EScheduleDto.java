@@ -6,25 +6,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class GroupScheduleDto implements Serializable {
-    private Integer eGroupScheduleId;
+public class EScheduleDto implements Serializable {
+    private Integer eScheduleId;
 
-    @NotEmpty
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private Date eGroupScheduleStartDate;
+    private LocalDate eScheduleDate;
 
-    @NotEmpty
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private Date eGroupScheduleEndDate;
+    private Integer eScheduleDay;
 
-    private Integer eGroupTotalPayment;
+    private Integer eSchedulePayment;
 
     private EGroup eGroup;
 }

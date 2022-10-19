@@ -1,17 +1,18 @@
 package com.tripath.trifood.api.trifood.controllers;
 
+import com.tripath.trifood.api.trifood.dto.FoodAmountDto;
 import com.tripath.trifood.api.trifood.dto.MealDto;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
-import com.tripath.trifood.api.trifood.response.MealResponse;
-import com.tripath.trifood.api.trifood.services.service.FoodAmountReturnService;
+import com.tripath.trifood.api.trifood.services.service.customReturn.FoodAmountReturnService;
 import com.tripath.trifood.api.trifood.services.service.MealService;
-import com.tripath.trifood.api.trifood.services.service.ScheduleReturnService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/meal")
@@ -20,22 +21,22 @@ public class MealController {
     @Autowired
     private MealService mealService;
 
-    @PostMapping("")
-    public ResponseEntity<MealDto> createMeal(@RequestBody MealDto mealDto){
-        MealDto createMeal = this.mealService.createMeal(mealDto);
+    @PostMapping("/createEWeeklySchedule")
+    public Long createEWeeklySchedule(){
+        Long id = this.mealService.createEWeeklySchedule();
+        return id;
+    }
+
+    @PostMapping("/{eWeeklyScheduleId}/{eDay}")
+    public ResponseEntity<MealDto> createMeal(
+            @RequestBody MealDto mealDto,
+            @PathVariable Long eWeeklyScheduleId,
+            @PathVariable Long eDay)
+    {
+        MealDto createMeal = this.mealService.createMeal(mealDto, eWeeklyScheduleId, eDay);
         return new ResponseEntity<>(createMeal, HttpStatus.CREATED);
     }
 
-    @GetMapping("")
-    public ResponseEntity<MealResponse> getAllMeals(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy",defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
-    ){
-        MealResponse mealResponse = this.mealService.getAllMeal(pageNumber, pageSize, sortBy, sortDir);
-        return new ResponseEntity<>(mealResponse, HttpStatus.OK) ;
-    }
 
     @GetMapping("/{mealId}")
     public ResponseEntity<MealDto> getMealById(@PathVariable Long mealId){
@@ -52,27 +53,29 @@ public class MealController {
     @PutMapping("/{mealId}")
     public ResponseEntity<MealDto> updateMeal(@RequestBody MealDto mealDto, @PathVariable Long mealId){
         MealDto updatedMeal = this.mealService.updateMeal(mealDto, mealId);
-        updatedMeal.setMealDate(mealDto.getMealDate());
-        updatedMeal.setMealDay(mealDto.getMealDate().getDay());
+        updatedMeal.setFood(mealDto.getFood());
+        updatedMeal.setMealName(mealDto.getMealName());
+        updatedMeal.setEDailySchedule(mealDto.getEDailySchedule());
         return new ResponseEntity<>(updatedMeal, HttpStatus.OK);
-    }
-
-    @GetMapping("/findMealFood")
-    public List<ScheduleReturnService> getMealFood(
-            @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "endDate", required = false) String endDate,
-            @RequestParam(value = "groupScheduleId", required = false) Integer groupScheduleId
-    ){
-            List<ScheduleReturnService> result = this.mealService.getMealFood(startDate, endDate, groupScheduleId);
-            return result;
     }
 
     @GetMapping("/getTotalFoodAmount")
     public ResponseEntity<List<FoodAmountReturnService>> getTotalFoodAmount(
-            @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "endDate", required = false) String endDate
+            @RequestParam(value = "weekNumber", required = false) Integer weekNumber,
+            @RequestParam(value = "weekYear", required = false) Integer weekYear,
+            @RequestParam(value = "eGroupId", required = false) Long eGroupId
     ){
-        List<FoodAmountReturnService> totalFoodAmount = this.mealService.countTotalFoodAmount(startDate, endDate);
+        List<FoodAmountReturnService> totalFoodAmount = this.mealService.countTotalFoodAmount(weekNumber, weekYear, eGroupId);
         return new ResponseEntity<>(totalFoodAmount, HttpStatus.OK);
+    }
+
+    @GetMapping("/getTotalFoodDelete")
+    public ResponseEntity<List<FoodAmountDto>> getTotalFoodDelete(
+            @RequestParam(value = "weekNumber", required = false) Integer weekNumber,
+            @RequestParam(value = "weekYear", required = false) Integer weekYear,
+            @RequestParam(value = "eGroupId", required = false) Long eGroupId
+    ){
+        List<FoodAmountDto> totalFoodDelete = this.mealService.countTotalFoodDelete(weekNumber, weekYear, eGroupId);
+        return new ResponseEntity<>(totalFoodDelete, HttpStatus.OK);
     }
 }

@@ -1,28 +1,23 @@
 package com.tripath.trifood.api.trifood.dto;
 
-import com.tripath.trifood.entities.GroupSchedule;
-import com.tripath.trifood.entities.Student;
+import com.tripath.trifood.api.student.dto.Student;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class StudentOrderDto {
-    @NotEmpty
-    private String registerMeal;
+    private Long deleteMeal;
 
-    @NotNull
-    private GroupSchedule groupSchedule;
+    private Integer orderWeekNumber;
 
-    private Integer minusPayment;
+    private Integer orderWeekMonth;
 
-    private Date orderDate;
+    private Integer orderWeekYear;
 
     @NotNull
     private Student student;

@@ -5,7 +5,7 @@ import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
 import com.tripath.trifood.entities.Food;
 import com.tripath.trifood.api.trifood.dto.FoodDto;
 import com.tripath.trifood.api.trifood.response.FoodResponse;
-import com.tripath.trifood.repositories.trifood.FoodRepository;
+import com.tripath.trifood.repositories.trifood.FoodRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class FoodServiceImpl implements FoodService {
 
     @Autowired
-    private FoodRepository foodRepo;
+    private FoodRepo foodRepo;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -34,7 +34,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public FoodDto updateFood(FoodDto foodDto, Integer foodId) {
+    public FoodDto updateFood(FoodDto foodDto, Long foodId) {
         Food food = this.foodRepo.findById(foodId).orElseThrow(()-> new ResourceNotFoundException("Food", "foodId", foodId));
         food.setFoodName(foodDto.getFoodName());
         food.setFoodPrice(foodDto.getFoodPrice());
@@ -45,7 +45,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public void deleteFood(Integer foodId) {
+    public void deleteFood(Long foodId) {
         Food food = this.foodRepo.findById(foodId).orElseThrow(()-> new ResourceNotFoundException("Food", "foodId", foodId));
         this.foodRepo.delete(food);
     }
@@ -71,7 +71,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public FoodDto getFoodById(Integer foodId) {
+    public FoodDto getFoodById(Long foodId) {
         Food food = this.foodRepo.findById(foodId).orElseThrow(()-> new ResourceNotFoundException("Food", "foodId", foodId));
         return this.modelMapper.map(food, FoodDto.class);
     }

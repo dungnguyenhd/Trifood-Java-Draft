@@ -1,7 +1,7 @@
 package com.tripath.trifood.common.security;
 
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
-import com.tripath.trifood.entities.Student;
+import com.tripath.trifood.api.student.dto.Student;
 import com.tripath.trifood.api.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

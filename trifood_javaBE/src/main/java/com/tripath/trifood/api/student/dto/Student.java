@@ -1,6 +1,9 @@
-package com.tripath.trifood.entities;
+package com.tripath.trifood.api.student.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tripath.trifood.entities.EClass;
+import com.tripath.trifood.entities.StudentOrder;
+import com.tripath.trifood.entities.StudentPayment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +22,7 @@ import java.util.stream.Collectors;
 public class Student implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "user_name", nullable = false, length = 100)
     private String name;
@@ -41,6 +44,7 @@ public class Student implements UserDetails {
 
 //    -------------------------TRIFOOD-ADD----------------------------------
     @ManyToOne
+    @JoinColumn(name = "e_class_id")
     private EClass eClass;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)

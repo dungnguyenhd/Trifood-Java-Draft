@@ -16,6 +16,4 @@ public interface StudentOrderService {
     StudentOrderResponse getAllStudentOrder(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
     StudentOrderDto getStudentOrderById(Long studentOrderId);
-
-    public Integer getMinusPayment(String meal_name, Integer groupId, String scheduleDate);
 }

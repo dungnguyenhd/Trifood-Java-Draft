@@ -1,25 +1,29 @@
 package com.tripath.trifood.api.trifood.services.service;
 
+import com.tripath.trifood.api.trifood.dto.FoodAmountDto;
 import com.tripath.trifood.api.trifood.dto.MealDto;
 import com.tripath.trifood.api.trifood.response.MealResponse;
+import com.tripath.trifood.api.trifood.services.service.customReturn.FoodAmountReturnService;
+import com.tripath.trifood.api.trifood.services.service.customReturn.EWeeklyScheduleReturnService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface MealService {
 
-    MealDto createMeal(MealDto mealDto);
+    Long createEWeeklySchedule();
+
+    MealDto createMeal(MealDto mealDto, Long eWeeklyScheduleId, Long eDay);
 
     MealDto updateMeal(MealDto mealDto, Long mealId);
 
     void deleteMeal(Long mealId);
 
-    MealResponse getAllMeal(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
+    List<FoodAmountReturnService> countTotalFoodAmount(Integer weekNumber, Integer weekYear, Long eGroupId);
 
-    List<ScheduleReturnService> getMealFood(String startDate, String endDate, Integer groupScheduleId);
-
-    List<FoodAmountReturnService> countTotalFoodAmount(String startDate, String endDate);
+    List<FoodAmountDto> countTotalFoodDelete(Integer weekNumber, Integer weekYear, Long eGroupId);
 
     MealDto getMealById(Long mealId);
 

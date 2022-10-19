@@ -1,6 +1,7 @@
 package com.tripath.trifood.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tripath.trifood.api.student.dto.Student;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="eating_classes")
+@Table(name="e_classes")
 @NoArgsConstructor
 @Getter
 @Setter
 public class EClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer eClassId;
+    private Long eClassId;
     @Column(name = "eClass_name")
     private String eClassName;
     @Column(name = "eClass_grade")

@@ -1,16 +1,14 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
-import com.tripath.trifood.api.trifood.dto.FoodDto;
+import com.tripath.trifood.api.student.dto.Student;
+import com.tripath.trifood.api.student.repository.StudentRepository;
 import com.tripath.trifood.api.trifood.dto.PaymentManagerDto;
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
-import com.tripath.trifood.api.trifood.response.FoodResponse;
 import com.tripath.trifood.api.trifood.response.StudentPaymentResponse;
 import com.tripath.trifood.api.trifood.services.service.PaymentManagerService;
-import com.tripath.trifood.entities.Food;
 import com.tripath.trifood.entities.StudentPayment;
 import com.tripath.trifood.api.trifood.dto.StudentPaymentDto;
-import com.tripath.trifood.repositories.trifood.GroupScheduleRespository;
-import com.tripath.trifood.repositories.trifood.StudentPaymentRepository;
+import com.tripath.trifood.repositories.trifood.*;
 import com.tripath.trifood.api.trifood.services.service.StudentPaymentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,52 +16,77 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class StudentPaymentServiceImpl implements StudentPaymentService {
-
     @Autowired
-    private StudentPaymentRepository studentPaymentRepo;
-
+    private StudentPaymentRepo studentPaymentRepo;
     @Autowired
-    private GroupScheduleRespository scheduleRepo;
-
+    StudentOrderRepo orderRepo;
+    @Autowired
+    StudentRepository studentRepo;
+    @Autowired
+    private WeekScheduleRepo weekRepo;
+    @Autowired
+    private EWeeklyScheduleRepo weeklyRepo;
+    @Autowired
+    private EGroupRepo eGroupRepo;
     @Autowired
     private ModelMapper modelMapper;
 
     @Override
-    public StudentPaymentDto createStudentPayment(StudentPaymentDto studentPaymentDto) {
-        StudentPayment studentPayment = this.modelMapper.map(studentPaymentDto, StudentPayment.class);
+    public StudentPayment createStudentPayment(Long studentId, Integer weekMonth, Integer weekYear) {
+        StudentPayment studentPayment = new StudentPayment();
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String startDate = dateFormat.format(studentPayment.getPayStartDate());
-        String endDate = dateFormat.format(studentPayment.getPayEndDate());
+        // find Monthly Payment
+        AtomicReference<Integer> scheduleMonthlyPayment = new AtomicReference<>(0);
+        AtomicReference<Integer> orderMinusPayment = new AtomicReference<>(0);
 
-        Integer groupId = scheduleRepo.findStudentGroupId(studentPayment.getStudent().getId());
-        Integer schedulePayment = scheduleRepo.getTotalPayment(startDate, endDate, groupId);
-        Integer minusPayment = studentPaymentRepo.getMonthlyMinusPayment(startDate, endDate, studentPayment.getStudent().getId());
+        Long groupId = eGroupRepo.findByStudent(studentId);
+        List<Long> listWeekId = weekRepo.findWeekIdByMonth(weekMonth, weekYear);
 
-        studentPayment.setTotalMoney(schedulePayment-minusPayment);
+        listWeekId.forEach((wId) -> {
+            List<Long> listWlId = weeklyRepo.findAllByWeekId(wId);
+            List<Long> listWeeklyId = Stream.of(listWlId).flatMap(Collection::stream).collect(Collectors.toList());
+            listWeeklyId.forEach((wlId) ->{
+                Integer value = studentPaymentRepo.countWeeklySchedulePayment(wlId);
+                scheduleMonthlyPayment.set(scheduleMonthlyPayment.get() + value);
+            });
+        });
 
-        StudentPayment newEgroup = this.studentPaymentRepo.save(studentPayment);
-        return this.modelMapper.map(newEgroup, StudentPaymentDto.class);
+        List<Long> mealId = orderRepo.getAllDeleteMeal(weekMonth, weekYear);
+
+        mealId.forEach((mId) -> {
+            Integer value = studentPaymentRepo.countOrderMinusPayment(mId);
+            orderMinusPayment.set(orderMinusPayment.get() + value);
+        });
+
+        Integer totalMoney = scheduleMonthlyPayment.get() - orderMinusPayment.get();
+        // find Monthly Payment
+
+        studentPayment.setStudent(studentRepo.findBysId(studentId));
+        studentPayment.setTotalMoney(totalMoney);
+        studentPayment.setIsPaid(false);
+        studentPayment.setPayMonth(weekMonth);
+
+        StudentPayment newPayment = this.studentPaymentRepo.save(studentPayment);
+        return newPayment;
     }
 
     @Override
-    public StudentPaymentDto updateStudentPayment(StudentPaymentDto studentPaymentDto, Long studentPaymentId) {
+    public StudentPaymentDto updateStudentPayment(Long studentPaymentId) {
         StudentPayment studentPayment = this.studentPaymentRepo.findById(studentPaymentId).orElseThrow(()-> new ResourceNotFoundException("StudentPayment", "studentPaymentId", studentPaymentId));
-        studentPayment.setIsPaid(studentPaymentDto.getIsPaid());
-        studentPayment.setPayDate(studentPaymentDto.getPayDate());
-        studentPayment.setTotalMoney(studentPaymentDto.getTotalMoney());
-        studentPayment.setStudent(studentPaymentDto.getStudent());
-        studentPayment.setPayStartDate(studentPaymentDto.getPayStartDate());
-        studentPayment.setPayEndDate(studentPaymentDto.getPayEndDate());
+        studentPayment.setIsPaid(studentPayment.getIsPaid());
 
         StudentPayment updatedStudentPayment = this.studentPaymentRepo.save(studentPayment);
         return this.modelMapper.map(updatedStudentPayment, StudentPaymentDto.class);
@@ -76,11 +99,11 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     }
 
     @Override
-    public StudentPaymentResponse getAllStudentPayment(String startDate, String endDate, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+    public StudentPaymentResponse getAllStudentPayment(Integer payMonth, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
         Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
         Pageable p = PageRequest.of(pageNumber, pageSize, sort);
-        Page<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.getAllPayment(startDate, endDate, p);
+        Page<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.getAllPayment(payMonth, p);
         List<PaymentManagerService> allPayment = pageStudentPayment.getContent();
         List<PaymentManagerDto> paymentDto = allPayment.stream().map((payment) -> this.modelMapper.map(payment, PaymentManagerDto.class)).collect(Collectors.toList());
 
@@ -95,30 +118,11 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     }
 
     @Override
-    public StudentPaymentResponse sortPayment(String startDate, String endDate, String classLevel, String classGrade, String className, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+    public StudentPaymentResponse sortPayment(Integer payMonth, String classLevel, String classGrade, String className, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
         Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
         Pageable p = PageRequest.of(pageNumber, pageSize, sort);
-        Page<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.sortPayment(startDate, endDate, classLevel, classGrade, className, p);
-        List<PaymentManagerService> allPayment = pageStudentPayment.getContent();
-        List<PaymentManagerDto> paymentDto = allPayment.stream().map((payment) -> this.modelMapper.map(payment, PaymentManagerDto.class)).collect(Collectors.toList());
-
-        StudentPaymentResponse paymentResponse = new StudentPaymentResponse();
-        paymentResponse.setContent(paymentDto);
-        paymentResponse.setPageNumber(pageStudentPayment.getNumber());
-        paymentResponse.setTotalElements(pageStudentPayment.getTotalElements());
-        paymentResponse.setTotalPages(pageStudentPayment.getTotalPages());
-        paymentResponse.setLastPage(pageStudentPayment.isLast());
-
-        return paymentResponse;
-    }
-
-    @Override
-    public StudentPaymentResponse searchPaymentByStudentName(String startDate, String endDate, String studentName, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
-        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-
-        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
-        Page<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.searchPaymentByStudentName(startDate, endDate, studentName, p);
+        Page<PaymentManagerService> pageStudentPayment = this.studentPaymentRepo.sortPayment(payMonth, classLevel, classGrade, className, p);
         List<PaymentManagerService> allPayment = pageStudentPayment.getContent();
         List<PaymentManagerDto> paymentDto = allPayment.stream().map((payment) -> this.modelMapper.map(payment, PaymentManagerDto.class)).collect(Collectors.toList());
 
@@ -139,26 +143,16 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     }
 
     @Override
-    public Integer getMonthlyPayment(String startDate, String endDate, Integer studentId) {
-        Integer groupId = this.scheduleRepo.findStudentGroupId(studentId);
-        Integer schedulePayment = this.scheduleRepo.getTotalPayment(startDate, endDate, groupId);
-        Integer minusPayment = this.studentPaymentRepo.getMonthlyMinusPayment(startDate, endDate, studentId);
-
-        return schedulePayment - minusPayment;
+    public Integer getStudentTotalMeal(Integer payMonth, Integer studentId) {
+        return null;
     }
 
-    @Override
-    public Integer getStudentTotalMeal(String startDate, String endDate, Integer studentId) {
-        try {
-            Integer groupId = this.scheduleRepo.findStudentGroupId(studentId);
-            Integer groupScheduleId = this.scheduleRepo.findStudentGroupScheduleId(groupId);
-            Integer totalGsMeal = this.studentPaymentRepo.countGroupScheduleMeal(startDate, endDate,groupScheduleId);
-            Integer totalSMeal  = this.studentPaymentRepo.countStudentDeleteMeal(studentId);
-            return totalGsMeal - totalSMeal;
-        }
-        catch (ResourceNotFoundException exception){
-            throw new ResourceNotFoundException("Amount", "Date", studentId, startDate, endDate);
-        }
-
+    @Scheduled(cron = "0 15 10 15 * ?")
+    public void createPaymentEveryMonth(){
+        List<Long> listStu = studentRepo.findAllStudentId();
+        Calendar calendar = Calendar.getInstance(Locale.CHINESE);
+        listStu.forEach((sId) -> {
+            createStudentPayment(sId, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+        });
     }
 }

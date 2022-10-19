@@ -1,7 +1,7 @@
 package com.tripath.trifood;
 
 import com.tripath.trifood.common.config.AppConstants;
-import com.tripath.trifood.entities.Role;
+import com.tripath.trifood.api.student.dto.Role;
 import com.tripath.trifood.api.student.repository.RoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +9,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @SpringBootApplication
+@EnableScheduling
 public class TriFoodApplication implements CommandLineRunner {
 
 	@Autowired

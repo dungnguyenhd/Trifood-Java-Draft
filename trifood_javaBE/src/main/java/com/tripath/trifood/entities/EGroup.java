@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "eating_groups")
+@Table(name = "e_groups")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class EGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "eGroup_id")
-    private Integer eGroupId;
+    private Long eGroupId;
     @Column(name = "eGroup_name")
     private String eGroupName;
     @Column(name = "eGroup_key")
@@ -34,5 +34,5 @@ public class EGroup {
 
     @OneToMany(mappedBy = "eGroup")
     @JsonIgnore
-    private List<GroupSchedule> groupSchedules = new ArrayList<>();
+    private List<WeekSchedule> weekSchedules = new ArrayList<>();
 }

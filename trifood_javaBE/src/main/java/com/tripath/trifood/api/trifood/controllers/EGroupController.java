@@ -37,21 +37,21 @@ public class EGroupController {
     }
 
     @GetMapping("/{eGroupId}")
-    public ResponseEntity<EGroupDto> getEGroupById(@PathVariable Integer eGroupId)
+    public ResponseEntity<EGroupDto> getEGroupById(@PathVariable Long eGroupId)
     {
         EGroupDto eGroupDto = this.eGroupService.getEGroupById(eGroupId);
         return new ResponseEntity<>(eGroupDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{eGroupId}")
-    public ApiResponse deteleEGroup(@PathVariable Integer eGroupId)
+    public ApiResponse deteleEGroup(@PathVariable Long eGroupId)
     {
         this.eGroupService.deleteEGroup(eGroupId);
         return new ApiResponse("Delete successful",true);
     }
 
     @PutMapping("/{eGroupId}")
-    public ResponseEntity<EGroupDto> updateEGroup(@RequestBody EGroupDto eGroupDto, @PathVariable Integer eGroupId)
+    public ResponseEntity<EGroupDto> updateEGroup(@RequestBody EGroupDto eGroupDto, @PathVariable Long eGroupId)
     {
         EGroupDto updatedEGroup = this.eGroupService.updateEGroup(eGroupDto, eGroupId);
         return new ResponseEntity<>(updatedEGroup, HttpStatus.OK);

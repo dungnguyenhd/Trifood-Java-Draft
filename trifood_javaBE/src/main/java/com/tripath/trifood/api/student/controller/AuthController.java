@@ -7,7 +7,7 @@ import com.tripath.trifood.api.student.dto.StudentDto;
 import com.tripath.trifood.api.student.service.StudentService;
 import com.tripath.trifood.api.student.repository.StudentRepository;
 import com.tripath.trifood.api.trifood.exceptions.ApiException;
-import com.tripath.trifood.entities.Student;
+import com.tripath.trifood.api.student.dto.Student;
 import com.tripath.trifood.api.student.payloads.JwtAuthRequest;
 import com.tripath.trifood.api.student.payloads.JwtAuthResponse;
 import com.tripath.trifood.common.security.JwtTokenHelper;
