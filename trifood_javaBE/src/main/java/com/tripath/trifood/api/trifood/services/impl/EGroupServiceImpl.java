@@ -17,20 +17,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
 public class EGroupServiceImpl implements EGroupService {
-
     @Autowired
     private EGroupRepo eGroupRepo;
-
     @Autowired
     private ModelMapper modelMapper;
-
     @Autowired
     private WeekScheduleRepo weekScheduleRepo;
 

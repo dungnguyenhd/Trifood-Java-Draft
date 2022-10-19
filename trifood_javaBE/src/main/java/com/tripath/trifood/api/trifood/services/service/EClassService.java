@@ -4,7 +4,6 @@ import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.response.EClassResponse;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public interface EClassService {
     EClassDto createEClass(EClassDto eClassDto);

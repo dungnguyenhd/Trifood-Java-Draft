@@ -19,10 +19,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentOrderServiceImpl implements StudentOrderService {
-
     @Autowired
     private StudentOrderRepo studentOrderRepo;
-
     @Autowired
     private ModelMapper modelMapper;
 

@@ -20,7 +20,7 @@ public class EWeeklyScheduleServiceImpl implements EWeeklyScheduleService {
     @Autowired
     private WeekScheduleRepo weekRepo;
     @Autowired
-    private EWeeklyScheduleRepo eWeeklyRepo;
+    private EWeeklyScheduleRepo weeklyRepo;
     @Autowired
     private AssignScheduleRepo assignRepo;
     @Autowired
@@ -30,7 +30,7 @@ public class EWeeklyScheduleServiceImpl implements EWeeklyScheduleService {
     public List<EWeeklyScheduleReturnService> findEWeeklyScheduleByGroup(Long eGroupId, Integer weekNumber){
         Long weekId = weekRepo.findByGroupAndWeekNumber(eGroupId, weekNumber);
         Long eWeeklyId = assignRepo.findByWeekId(weekId);
-        EWeeklySchedule eWeeklySchedule = eWeeklyRepo.findByEWeeklyId(eWeeklyId);
+        EWeeklySchedule eWeeklySchedule = weeklyRepo.findByEWeeklyId(eWeeklyId);
 
         Long mondaySch = eWeeklySchedule.getMondaySch();
         Long tuesdaySch = eWeeklySchedule.getTuesdaySch();
@@ -40,13 +40,13 @@ public class EWeeklyScheduleServiceImpl implements EWeeklyScheduleService {
         Long saturdaySch = eWeeklySchedule.getSaturdaySch();
         Long sundaySch = eWeeklySchedule.getSundaySch();
 
-        List<EWeeklyScheduleReturnService> result0 = eWeeklyRepo.findByDailyAndWeeklyId(mondaySch, eWeeklyId);
-        List<EWeeklyScheduleReturnService> result1 = eWeeklyRepo.findByDailyAndWeeklyId(tuesdaySch, eWeeklyId);
-        List<EWeeklyScheduleReturnService> result2 = eWeeklyRepo.findByDailyAndWeeklyId(wendnesdaySch, eWeeklyId);
-        List<EWeeklyScheduleReturnService> result3 = eWeeklyRepo.findByDailyAndWeeklyId(thursdaySch, eWeeklyId);
-        List<EWeeklyScheduleReturnService> result4 = eWeeklyRepo.findByDailyAndWeeklyId(fridaySch, eWeeklyId);
-        List<EWeeklyScheduleReturnService> result5 = eWeeklyRepo.findByDailyAndWeeklyId(saturdaySch, eWeeklyId);
-        List<EWeeklyScheduleReturnService> result6 = eWeeklyRepo.findByDailyAndWeeklyId(sundaySch, eWeeklyId);
+        List<EWeeklyScheduleReturnService> result0 = weeklyRepo.findByDailyAndWeeklyId(mondaySch, eWeeklyId);
+        List<EWeeklyScheduleReturnService> result1 = weeklyRepo.findByDailyAndWeeklyId(tuesdaySch, eWeeklyId);
+        List<EWeeklyScheduleReturnService> result2 = weeklyRepo.findByDailyAndWeeklyId(wendnesdaySch, eWeeklyId);
+        List<EWeeklyScheduleReturnService> result3 = weeklyRepo.findByDailyAndWeeklyId(thursdaySch, eWeeklyId);
+        List<EWeeklyScheduleReturnService> result4 = weeklyRepo.findByDailyAndWeeklyId(fridaySch, eWeeklyId);
+        List<EWeeklyScheduleReturnService> result5 = weeklyRepo.findByDailyAndWeeklyId(saturdaySch, eWeeklyId);
+        List<EWeeklyScheduleReturnService> result6 = weeklyRepo.findByDailyAndWeeklyId(sundaySch, eWeeklyId);
 
         List<EWeeklyScheduleReturnService> newList = Stream.of(result0, result1, result2, result3, result4, result5, result6).flatMap(Collection::stream).collect(Collectors.toList());
 

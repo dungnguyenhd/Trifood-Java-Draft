@@ -9,7 +9,6 @@ import com.tripath.trifood.entities.Meal;
 import com.tripath.trifood.api.trifood.dto.MealDto;
 import com.tripath.trifood.repositories.trifood.*;
 import com.tripath.trifood.api.trifood.services.service.MealService;
-import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,11 +28,11 @@ public class MealServiceImpl implements MealService {
     @Autowired
     private EDailyScheduleRepo eDailyScheduleRepo;
     @Autowired
-    EWeeklyScheduleRepo eWeeklyScheduleRepo;
-    @Autowired
-    WeekScheduleRepo weekRepo;
+    EWeeklyScheduleRepo weeklyRepo;
     @Autowired
     AssignScheduleRepo assignRepo;
+    @Autowired
+    WeekScheduleRepo weekRepo;
     @Autowired
     StudentOrderRepo orderRepo;
     @Autowired
@@ -84,7 +83,7 @@ public class MealServiceImpl implements MealService {
                 }
             }
         }
-        EWeeklySchedule newEWeeklySchedule = this.eWeeklyScheduleRepo.save(eWeeklySchedule);
+        EWeeklySchedule newEWeeklySchedule = this.weeklyRepo.save(eWeeklySchedule);
         return newEWeeklySchedule.getEWeeklyId();
     }
 
@@ -145,7 +144,6 @@ public class MealServiceImpl implements MealService {
                 }).collect(Collectors.toList());
         return newList;
     }
-
 
     @Override
     public MealDto getMealById(Long mealId) {

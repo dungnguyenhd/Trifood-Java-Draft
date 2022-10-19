@@ -15,9 +15,8 @@ public interface StudentPaymentService {
 
     StudentPaymentResponse getAllStudentPayment(Integer payMonth, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
-    StudentPaymentResponse sortPayment(Integer payMonth, String classLevel, String classGrade, String className, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
+    StudentPaymentResponse sortPayment(Integer payMonth, String classLevel, String classGrade, String className, String studentName ,Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
     StudentPaymentDto getStudentPaymentById(Long studentPaymentId);
 
-    Integer getStudentTotalMeal(Integer payMonth, Integer studentId);
 }

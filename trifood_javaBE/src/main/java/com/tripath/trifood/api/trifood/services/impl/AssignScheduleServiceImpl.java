@@ -14,41 +14,39 @@ import java.util.List;
 @Service
 public class AssignScheduleServiceImpl implements AssignScheduleService {
     @Autowired
-    WeekScheduleRepo weekScheduleRepo;
-
+    WeekScheduleRepo weekRepo;
     @Autowired
-    AssignScheduleRepo assignScheduleRepo;
-
+    AssignScheduleRepo assignRepo;
     @Autowired
-    EWeeklyScheduleRepo eWeeklyScheduleRepo;
+    EWeeklyScheduleRepo weeklyRepo;
 
     @Override
     public void createAssignScheduleForAllWeek(Long eGroupId, Long eWeeklyScheduleId){
-        List<Long> listWeekId = weekScheduleRepo.getWeekIdByEGroupId(eGroupId);
+        List<Long> listWeekId = weekRepo.findAllWeekIdByEGroupId(eGroupId);
         listWeekId.forEach((id) -> {
-                AssignSchedule assignSchedule = new AssignSchedule();
-                assignSchedule.setWeekSchedule(this.weekScheduleRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("weekSchedule", "eGroupId", id)));
-                assignSchedule.setEWeeklySchedule(this.eWeeklyScheduleRepo.findById(eWeeklyScheduleId).orElseThrow(()-> new ResourceNotFoundException("eWeekSchedule", "eWeekScheduleId", eWeeklyScheduleId)));
-                this.assignScheduleRepo.save(assignSchedule);
+                AssignSchedule assign = new AssignSchedule();
+                assign.setWeekSchedule(this.weekRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("weekSchedule", "eGroupId", id)));
+                assign.setEWeeklySchedule(this.weeklyRepo.findById(eWeeklyScheduleId).orElseThrow(()-> new ResourceNotFoundException("eWeekSchedule", "eWeekScheduleId", eWeeklyScheduleId)));
+                this.assignRepo.save(assign);
         });
     }
 
     @Override
     public void createAssignScheduleForSingleWeek(Long eGroupId,Integer weekNumber, Integer weekYear, Long eWeeklyScheduleId) {
-        Long weekId = weekScheduleRepo.getSingleWeekIdByEGroupId(eGroupId, weekNumber, weekYear);
-        AssignSchedule assignSchedule = new AssignSchedule();
-        assignSchedule.setWeekSchedule(this.weekScheduleRepo.findById(weekId).orElseThrow(()-> new ResourceNotFoundException("eWeekSchedule", "eWeekScheduleId", weekId)));
-        assignSchedule.setEWeeklySchedule(this.eWeeklyScheduleRepo.findById(eWeeklyScheduleId).orElseThrow(()-> new ResourceNotFoundException("eWeekSchedule", "eWeekScheduleId", eWeeklyScheduleId)));
+        Long weekId = weekRepo.findSingleWeekIdByEGroupId(eGroupId, weekNumber, weekYear);
+        AssignSchedule assign = new AssignSchedule();
+        assign.setWeekSchedule(this.weekRepo.findById(weekId).orElseThrow(()-> new ResourceNotFoundException("eWeekSchedule", "eWeekScheduleId", weekId)));
+        assign.setEWeeklySchedule(this.weeklyRepo.findById(eWeeklyScheduleId).orElseThrow(()-> new ResourceNotFoundException("eWeekSchedule", "eWeekScheduleId", eWeeklyScheduleId)));
     }
 
     @Override
     public AssignSchedule updateAssignScheduleForSingleWeek(AssignSchedule assignSchedule,Long eGroupId, Integer weekNumber, Integer weekYear, Long eWeeklyScheduleId) {
-        Long weekId = weekScheduleRepo.getSingleWeekIdByEGroupId(eGroupId, weekNumber, weekYear);
-        AssignSchedule newassignSchedule = this.assignScheduleRepo.findByWeekIdAndEWeeklyId(weekId, eWeeklyScheduleId);
-        newassignSchedule.setEWeeklySchedule(assignSchedule.getEWeeklySchedule());
-        newassignSchedule.setWeekSchedule(assignSchedule.getWeekSchedule());
+        Long weekId = weekRepo.findSingleWeekIdByEGroupId(eGroupId, weekNumber, weekYear);
+        AssignSchedule newAssign = this.assignRepo.findByWeekIdAndEWeeklyId(weekId, eWeeklyScheduleId);
+        newAssign.setEWeeklySchedule(assignSchedule.getEWeeklySchedule());
+        newAssign.setWeekSchedule(assignSchedule.getWeekSchedule());
 
-        AssignSchedule updatedAssignSchedule = this.assignScheduleRepo.save(newassignSchedule);
+        AssignSchedule updatedAssignSchedule = this.assignRepo.save(newAssign);
         return updatedAssignSchedule;
     }
 }

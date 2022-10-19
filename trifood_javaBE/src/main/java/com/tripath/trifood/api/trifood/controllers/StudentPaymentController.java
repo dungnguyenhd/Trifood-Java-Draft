@@ -28,7 +28,7 @@ public class StudentPaymentController {
 
     @GetMapping("")
     public ResponseEntity<StudentPaymentResponse> getAllStudentPayments(
-            @RequestParam(value = "payMonth", defaultValue = "2022-02-10", required = true) Integer payMonth,
+            @RequestParam(value = "payMonth", required = true) Integer payMonth,
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
             @RequestParam(value = "sortBy",defaultValue = "student_fullname", required = false) String sortBy,
@@ -40,16 +40,17 @@ public class StudentPaymentController {
 
     @GetMapping("/sortPayment")
     public ResponseEntity<StudentPaymentResponse> sortPayment(
-            @RequestParam(value = "payMonth", defaultValue = "2022-02-10", required = true) Integer payMonth,
-            @RequestParam(value = "classLevel", defaultValue = "THPT", required = false) String classLevel,
-            @RequestParam(value = "classGrade", defaultValue = "5", required = false) String classGrade,
-            @RequestParam(value = "className", defaultValue = "5A", required = false) String className,
+            @RequestParam(value = "payMonth", defaultValue = "0", required = true) Integer payMonth,
+            @RequestParam(value = "studentName", required = false) String studentName,
+            @RequestParam(value = "classLevel", required = false) String classLevel,
+            @RequestParam(value = "classGrade", required = false) String classGrade,
+            @RequestParam(value = "className", required = false) String className,
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
             @RequestParam(value = "sortBy",defaultValue = "student_fullname", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ){
-        StudentPaymentResponse studentPaymentResponse = this.studentPaymentService.sortPayment(payMonth, classLevel, classGrade, className, pageNumber, pageSize, sortBy, sortDir);
+        StudentPaymentResponse studentPaymentResponse = this.studentPaymentService.sortPayment(payMonth, classLevel, classGrade, className, studentName, pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(studentPaymentResponse, HttpStatus.OK) ;
     }
 
@@ -69,14 +70,5 @@ public class StudentPaymentController {
     public ResponseEntity<StudentPaymentDto> updateStudentPayment(@PathVariable Long studentPaymentId){
         StudentPaymentDto updatedStudentPayment = this.studentPaymentService.updateStudentPayment(studentPaymentId);
         return new ResponseEntity<>(updatedStudentPayment, HttpStatus.OK);
-    }
-
-    @GetMapping("/getStudentTotalMeal")
-    public Integer getTotalMeal(
-            @RequestParam(value = "startDate", required = false) Integer payMonth,
-            @RequestParam(value = "studentId", required = false) Integer studentId
-    ){
-        Integer totalMeal = this.studentPaymentService.getStudentTotalMeal(payMonth, studentId);
-        return totalMeal;
     }
 }

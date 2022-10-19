@@ -22,6 +22,8 @@ public class StudentPayment {
 
     private Integer payMonth;
 
+    private Long foodAmount;
+
     @ManyToOne
     @JoinColumn(name = "studentId")
     private Student student;

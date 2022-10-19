@@ -19,10 +19,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class EClassServiceImpl implements EClassService {
-
     @Autowired
     private EClassRepo eClassRepo;
-
     @Autowired
     private ModelMapper modelMapper;
 
