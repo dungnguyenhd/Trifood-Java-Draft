@@ -32,7 +32,7 @@ public class EGroup {
     @JsonIgnore
     private List<EClass> eClasses = new ArrayList<>();
 
-    @OneToMany(mappedBy = "eGroup")
+    @OneToMany(mappedBy = "eGroup", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<WeekSchedule> weekSchedules = new ArrayList<>();
 }

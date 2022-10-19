@@ -26,7 +26,7 @@ public class StudentOrder implements Serializable {
 
     private Integer orderWeekYear;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "studentId")
     private Student student;
 }
