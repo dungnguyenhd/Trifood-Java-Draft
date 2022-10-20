@@ -16,11 +16,11 @@ public class AssignSchedule implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "week_id", unique = true)
     private WeekSchedule weekSchedule;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "e_weekly_id")
     private EWeeklySchedule eWeeklySchedule;
 }

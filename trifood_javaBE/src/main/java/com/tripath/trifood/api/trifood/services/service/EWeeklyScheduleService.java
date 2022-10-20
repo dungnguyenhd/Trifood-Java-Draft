@@ -10,4 +10,6 @@ public interface EWeeklyScheduleService {
     List<EWeeklyScheduleReturnService> findEWeeklyScheduleByGroup(Long eGroupId, Integer weekNumber);
 
     List<EWeeklyScheduleReturnService> findEWeeklyScheduleByStudent(Long studentId, Integer weekNumber);
+
+    void deleteEWeeklySchedule(Long eWeeklyId);
 }

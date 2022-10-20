@@ -1,5 +1,6 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
+import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
 import com.tripath.trifood.api.trifood.services.service.EWeeklyScheduleService;
 import com.tripath.trifood.api.trifood.services.service.customReturn.EWeeklyScheduleReturnService;
 import com.tripath.trifood.entities.EWeeklySchedule;
@@ -58,5 +59,11 @@ public class EWeeklyScheduleServiceImpl implements EWeeklyScheduleService {
         Long groupId = eGroupRepo.findByStudent(studentId);
         List<EWeeklyScheduleReturnService> newList = findEWeeklyScheduleByGroup(groupId, weekNumber);
         return newList;
+    }
+
+    @Override
+    public void deleteEWeeklySchedule(Long eWeeklyId) {
+        EWeeklySchedule weekly = this.weeklyRepo.findById(eWeeklyId).orElseThrow(()-> new ResourceNotFoundException("eWeeklySchedule", "eWeeklyScheduleId", eWeeklyId));
+        this.weeklyRepo.delete(weekly);
     }
 }

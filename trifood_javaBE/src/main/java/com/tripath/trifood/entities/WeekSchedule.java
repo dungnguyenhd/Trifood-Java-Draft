@@ -1,6 +1,5 @@
 package com.tripath.trifood.entities;
 
-import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

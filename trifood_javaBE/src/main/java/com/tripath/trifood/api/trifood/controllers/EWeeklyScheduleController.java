@@ -1,12 +1,10 @@
 package com.tripath.trifood.api.trifood.controllers;
 
+import com.tripath.trifood.api.trifood.response.ApiResponse;
 import com.tripath.trifood.api.trifood.services.service.EWeeklyScheduleService;
 import com.tripath.trifood.api.trifood.services.service.customReturn.EWeeklyScheduleReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,4 +32,9 @@ public class EWeeklyScheduleController {
         return list;
     }
 
+    @DeleteMapping("/{eWeeklyScheduleId}")
+    public ApiResponse deleteEWeeklySchedule(@PathVariable Long eWeeklyScheduleIdy){
+        this.eWeeklyService.deleteEWeeklySchedule(eWeeklyScheduleIdy);
+        return new ApiResponse("Delete successful",true);
+    }
 }
