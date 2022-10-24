@@ -17,10 +17,10 @@ public class AssignSchedule implements Serializable {
     Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "week_id", unique = true)
+    @JoinColumn(name = "week_id")
     private WeekSchedule weekSchedule;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "e_weekly_id")
-    private EWeeklySchedule eWeeklySchedule;
+    @JoinColumn(name = "meal_id")
+    private Meal meal;
 }

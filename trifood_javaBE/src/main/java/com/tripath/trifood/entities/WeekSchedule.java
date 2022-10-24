@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -21,6 +22,9 @@ public class WeekSchedule implements Serializable {
     private Integer weekMonth;
 
     private Integer weekYear;
+
+    @OneToMany(mappedBy = "weekSchedule", cascade = CascadeType.ALL)
+    Set<AssignSchedule> assignSchedules;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "eGroup_id", referencedColumnName = "eGroup_id")

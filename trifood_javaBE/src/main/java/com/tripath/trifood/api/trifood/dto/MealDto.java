@@ -1,12 +1,11 @@
 package com.tripath.trifood.api.trifood.dto;
 
-import com.tripath.trifood.entities.Food;
-import com.tripath.trifood.entities.EDailySchedule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,10 +13,11 @@ import javax.validation.constraints.NotNull;
 public class MealDto {
 
     @NotNull
-    private Food food;
+    private Long foodId;
 
-    @NotNull
-    private EDailySchedule eDailySchedule;
+    private String mealDay;
+
+    Boolean isCircle;
 
     @NotEmpty
     private String mealName;

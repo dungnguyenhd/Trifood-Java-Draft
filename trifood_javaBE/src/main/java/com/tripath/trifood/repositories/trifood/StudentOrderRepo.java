@@ -9,12 +9,9 @@ import java.util.List;
 
 @Repository
 public interface StudentOrderRepo extends JpaRepository<StudentOrder, Long> {
-    @Query(value = "SELECT e_group_id FROM e_classes c INNER JOIN students s ON c.e_class_id = s.e_class_id WHERE id = ?", nativeQuery = true)
-    Integer getStudentGroup(Integer studentId);
+    @Query(value = "SELECT SUM(food_price) FROM ((meal m INNER JOIN food f ON m.food_id = f.food_id) INNER JOIN student_orders o ON o.delete_meal = m.meal_id) WHERE order_week_month = ? and order_week_year = ? and o.student_id = ?", nativeQuery = true)
+    Integer getDeleteMealMinusPayment(Integer weekMonth, Integer weekYear, Long studentId);
 
-    @Query(value = "SELECT delete_meal FROM student_orders WHERE order_week_month = ? and order_week_year = ?", nativeQuery = true)
-    List<Long> getAllDeleteMeal(Integer weekMonth, Integer weekYear);
-
-    @Query(value = "SELECT delete_meal FROM student_orders WHERE order_week_number = ? and order_week_year = ?", nativeQuery = true)
-    List<Long> getAllDeleteMealByWeekNumber(Integer weekNumber, Integer weekYear);
+    @Query(value = "SELECT COUNT(delete_meal) FROM student_orders WHERE student_id = ? and order_week_month = ? and order_week_year = ?", nativeQuery = true)
+    Integer getAllMonthlyDeleteMeal(Long studentId ,Integer weekNumber, Integer weekYear);
 }

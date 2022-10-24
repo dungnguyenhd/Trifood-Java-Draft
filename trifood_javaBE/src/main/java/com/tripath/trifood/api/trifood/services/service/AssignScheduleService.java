@@ -1,13 +1,13 @@
 package com.tripath.trifood.api.trifood.services.service;
 
-import com.tripath.trifood.entities.AssignSchedule;
+import com.tripath.trifood.api.trifood.services.service.customReturn.ScheduleReturnService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface AssignScheduleService {
-    void createAssignScheduleForAllWeek(Long eGroupId, Long eWeeklyScheduleId);
+    List<ScheduleReturnService> findScheduleOfGroup(Long eGroupId, Integer weekNumer, Integer weekYear);
 
-    void createAssignScheduleForSingleWeek(Long eGroupId, Integer weekNumber, Integer weekYear, Long eWeeklyScheduleId);
-
-    AssignSchedule updateAssignScheduleForSingleWeek(AssignSchedule assignSchedule ,Long eGroupId, Integer weekNumber, Integer weekYear, Long eWeeklyScheduleId);
+    List<ScheduleReturnService> findScheduleOfStudent(Long studentId, Integer weekNumber, Integer weekYear);
 }
