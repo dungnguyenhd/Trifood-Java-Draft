@@ -22,7 +22,7 @@ public class StudentPayment {
 
     private Integer payMonth;
 
-    private Long foodAmount;
+    private Integer foodAmount;
 
     @ManyToOne
     @JoinColumn(name = "studentId")
