@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +33,12 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
     @Autowired
     StudentRepository studentRepo;
     @Autowired
+    private WeekScheduleRepo weekRepo;
+    @Autowired
+    private EWeeklyScheduleRepo weeklyRepo;
+    @Autowired
+    private EGroupRepo eGroupRepo;
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
@@ -39,22 +46,55 @@ public class StudentPaymentServiceImpl implements StudentPaymentService {
         StudentPayment studentPayment = new StudentPayment();
 
         // find Monthly Payment
-        Integer scheduleMonthlyPayment = studentPaymentRepo.getStudentMothlyPayment(studentId, weekMonth, weekYear);
-        Integer orderMinusPayment = orderRepo.getDeleteMealMinusPayment(weekMonth, weekYear, studentId);
-        Integer totalMoney = scheduleMonthlyPayment - orderMinusPayment;
-//         find Monthly Payment
+        AtomicReference<Integer> scheduleMonthlyPayment = new AtomicReference<>(0);
+        AtomicReference<Integer> orderMinusPayment = new AtomicReference<>(0);
 
-//         find food Amount
-        Integer totalAmount = studentPaymentRepo.countMonthlyTotalFood(studentId, weekMonth, weekYear);
-        Integer deleteAmount = orderRepo.getAllMonthlyDeleteMeal(studentId, weekMonth, weekYear);
-        Integer finalAmount = totalAmount - deleteAmount;
-//         find food Amount
+        Long groupId = eGroupRepo.findByStudent(studentId);
+        List<Long> listWeekId = weekRepo.findWeekIdByMonth(weekMonth, weekYear, groupId);
+
+        listWeekId.forEach((wId) -> {
+            Long wlId = weeklyRepo.findAllByWeekId(wId);
+            Integer value = studentPaymentRepo.countWeeklySchedulePayment(wlId);
+            scheduleMonthlyPayment.set(scheduleMonthlyPayment.get() + value);
+        });
+
+        List<Long> mealId = orderRepo.getAllDeleteMeal(weekMonth, weekYear);
+
+        mealId.forEach((mId) -> {
+            Integer value = studentPaymentRepo.countOrderMinusPayment(mId);
+            orderMinusPayment.set(orderMinusPayment.get() + value);
+        });
+
+        Integer totalMoney = scheduleMonthlyPayment.get() - orderMinusPayment.get();
+
+        // find Monthly Payment
+
+        // find food Amount
+            AtomicReference<Long> totalAmount = new AtomicReference<>(0L);
+
+            listWeekId.forEach((wId) -> {
+                Long wlId = weeklyRepo.findAllByWeekId(wId);
+                Long value = studentPaymentRepo.countMonthlyTotalFood(wlId);
+                totalAmount.set(totalAmount.get() + value);
+            });
+
+            AtomicReference<Long> deleteAmount = new AtomicReference<>(0L);
+
+            List<Integer> listWNumber = weekRepo.findAllWeekNumberByMonthAndEGroupId(weekMonth, weekYear, groupId);
+            listWNumber.forEach((wNb) ->{
+                List<Long> listDeleteId = orderRepo.getAllDeleteMealByWeekNumber(wNb, weekYear);
+                listDeleteId.forEach((mId) -> {
+                    deleteAmount.set(deleteAmount.get()+ 1);
+                });
+            });
+
+        // find food Amount
 
         studentPayment.setStudent(studentRepo.findBysId(studentId));
         studentPayment.setTotalMoney(totalMoney);
         studentPayment.setIsPaid(false);
         studentPayment.setPayMonth(weekMonth);
-        studentPayment.setFoodAmount(finalAmount);
+        studentPayment.setFoodAmount(totalAmount.get()-deleteAmount.get());
 
         StudentPayment newPayment = this.studentPaymentRepo.save(studentPayment);
         return newPayment;

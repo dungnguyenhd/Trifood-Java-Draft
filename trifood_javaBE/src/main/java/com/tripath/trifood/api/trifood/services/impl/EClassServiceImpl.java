@@ -1,7 +1,5 @@
 package com.tripath.trifood.api.trifood.services.impl;
 
-import com.tripath.trifood.api.student.dto.Student;
-import com.tripath.trifood.api.student.dto.StudentDto;
 import com.tripath.trifood.api.trifood.exceptions.ResourceNotFoundException;
 import com.tripath.trifood.entities.EClass;
 import com.tripath.trifood.api.trifood.dto.EClassDto;
@@ -125,9 +123,10 @@ public class EClassServiceImpl implements EClassService {
         return eClassResponse;
     }
 
-    @Override
-    public List<Student> findStudentsOfClass(Integer classId) {
-        List<Student> listStudents = this.eClassRepo.findStudentsOfClass(classId);
-        return listStudents;
-    }
+//    @Override
+//    public List<StudentDto> findStudentsOfClass(Integer classId) {
+//        List<Student> listStudents = this.eClassRepo.findStudentsOfClass(classId);
+//        List<StudentDto> listDto = listStudents.stream().map((student)->this.modelMapper.map(student, StudentDto.class)).collect(Collectors.toList());
+//        return listDto;
+//    }
 }

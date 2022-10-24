@@ -1,6 +1,5 @@
 package com.tripath.trifood.api.trifood.controllers;
 
-import com.tripath.trifood.api.student.dto.Student;
 import com.tripath.trifood.api.trifood.dto.EClassDto;
 import com.tripath.trifood.api.trifood.response.EClassResponse;
 import com.tripath.trifood.api.trifood.response.ApiResponse;
@@ -10,11 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/eClass")
 public class EClassController {
+
     @Autowired
     private EClassService eClassService;
 
@@ -29,8 +27,8 @@ public class EClassController {
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
             @RequestParam(value = "sortBy",defaultValue = "eClassId", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir)
-    {
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ){
         EClassResponse eClassResponse = this.eClassService.getAllEClass(pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(eClassResponse, HttpStatus.OK) ;
     }
@@ -71,8 +69,8 @@ public class EClassController {
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
             @RequestParam(value = "sortBy",defaultValue = "e_class_id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir)
-    {
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ){
         EClassResponse result = this.eClassService.findClassesOfGroup(groupId, pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -85,18 +83,18 @@ public class EClassController {
             @RequestParam(value = "startYear", required = false) Integer startYear,
             @RequestParam(value = "endYear", required = false) Integer endYear,
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize)
-    {
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize
+    ){
         EClassResponse result = this.eClassService.sortClass(classLevel, classGrade, className, startYear, endYear, pageNumber, pageSize);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/findStudentsOfClass")
-    public ResponseEntity<List<Student>> findStudentsOfClass(
-            @RequestParam(value = "classId", defaultValue = "1", required = false) Integer classId)
-    {
-        List<Student> result = this.eClassService.findStudentsOfClass(classId);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
+//    @GetMapping("/findStudentsOfClass")
+//    public ResponseEntity<List<StudentDto>> findStudentsOfClass(
+//            @RequestParam(value = "classId", defaultValue = "1", required = false) Integer classId
+//    ){
+//        List<StudentDto> result = this.eClassService.findStudentsOfClass(classId);
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
 
 }

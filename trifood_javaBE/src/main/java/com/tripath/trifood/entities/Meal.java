@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -16,20 +16,16 @@ import java.util.*;
 public class Meal implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    Long mealId;
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "food_id")
     private Food food;
 
+    @ManyToOne
+    @JoinColumn(name = "e_daily_id")
+    private EDailySchedule eDailySchedule;
+
     @Column(name = "meal_name")
     private String mealName;
-
-    @Column(name = "meal_day")
-    private String mealDay;
-
-    Boolean isCircle;
-
-    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
-    Set<AssignSchedule> assignSchedules;
 }

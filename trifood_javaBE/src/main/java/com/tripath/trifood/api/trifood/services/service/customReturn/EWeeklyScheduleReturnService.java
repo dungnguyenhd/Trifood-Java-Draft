@@ -1,8 +1,8 @@
 package com.tripath.trifood.api.trifood.services.service.customReturn;
 
-public interface ScheduleReturnService {
+public interface EWeeklyScheduleReturnService {
     Long getId();
-    Integer getMealDay();
+    Integer getEDay();
     String getMealName();
     String getFoodName();
     Integer getFoodPrice();
